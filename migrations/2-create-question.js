@@ -23,9 +23,9 @@ module.exports = {
       },
       imgUrl: {
         type: Sequelize.DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
-      seletedAnswer: {
+      selectedAnswer: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: true,
       },
