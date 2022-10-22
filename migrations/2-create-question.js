@@ -7,37 +7,39 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       content: {
-        type: Sequelize.STRING
-      },
-      score: {
-        type: Sequelize.INTEGER
-      },
-      done: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       imgUrl: {
-        type: Sequelize.STRING
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+      },
+      seletedAnswer: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Questions');
-  }
+  },
 };

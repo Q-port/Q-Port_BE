@@ -20,13 +20,13 @@ module.exports = (sequelize, DataTypes) => {
         unique: true, // UNIQUE, 유일한 값만 존재할 수 있음
         type: DataTypes.INTEGER,
       },
-      questionId: {
-        allowNull: false, // NOT NULL, Null을 허용하지 않음
-        type: DataTypes.INTEGER,
-      },
       userId: {
-        allowNull: false, // NOT NULL, Null을 허용하지 않음
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      questionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       title: {
         type: DataTypes.STRING,
@@ -34,10 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       content: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      done: {
-        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
       imgUrl: {
