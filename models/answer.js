@@ -40,10 +40,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
-      modelName: 'Answer',
+      modelName: 'Question',
+      timestamps: false,
     }
   );
   return Answer;
