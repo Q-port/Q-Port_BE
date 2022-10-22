@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       userId: {
-        allowNull: false, // NOT NULL, Null을 허용하지 않음
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       title: {
         type: DataTypes.STRING,
@@ -32,17 +32,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      score: {
-        allowNull: false, // NOT NULL, Null을 허용하지 않음
-        type: DataTypes.INTEGER,
-      },
-      done: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
       imgUrl: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      seletedAnswer: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
       },
     },
     {

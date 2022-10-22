@@ -32,16 +32,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      userScore: {
-        allowNull: false, // NOT NULL, Null을 허용하지 않음
-        type: DataTypes.INTEGER,
-      },
-      choice: {
-        allowNull: false, // NOT NULL, Null을 허용하지 않음
-        type: DataTypes.INTEGER,
-      },
       avatar: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      score: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
