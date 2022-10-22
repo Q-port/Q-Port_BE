@@ -6,10 +6,14 @@ class QuestionsRepository {
   }
 
   createQna = async (qna) => {
-    await this.Question.create(qna);
+    await this.Question.create({
+      ...qna,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
   };
 
-  getQna = async (req, res, next) => {
+  getQna = async () => {
     return await this.Question.findAll({
       attributes: {
         exclude: ['content'],
@@ -28,12 +32,25 @@ class QuestionsRepository {
 
   updateQna = async (questionId, title, content, imgUrl) => {
     await this.Question.update(
-      { title, content, imgUrl },
+      { title, content, imgUrl, updatedAt: Date.now() },
       { where: { questionId } }
     );
   };
 
-  deleteQna = async (req, res, next) => {};
+  deleteQna = async (questionId) => {
+    await this.Question.destroy({
+      where: {
+        questionId,
+      },
+    });
+  };
+
+  selectQna = async (questionId, answerId) => {
+    await this.Question.update(
+      { selectedAnswer: answerId },
+      { where: { questionId } }
+    );
+  };
 }
 
 module.exports = QuestionsRepository;

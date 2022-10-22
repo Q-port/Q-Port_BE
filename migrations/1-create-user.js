@@ -23,11 +23,11 @@ module.exports = {
       },
       avatar: {
         type: Sequelize.DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       score: {
         type: Sequelize.DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

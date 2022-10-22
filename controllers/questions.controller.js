@@ -42,7 +42,7 @@ class QuestionsController {
     try {
       await this.questionsService.updateQna(req, res);
 
-      res.status(200).send({ ok: true, meeage: '게시글이 수정되었습니다.' });
+      res.status(200).send({ ok: true, message: '게시글이 수정되었습니다.' });
     } catch (error) {
       res
         .status(error.status || 400)
@@ -50,7 +50,28 @@ class QuestionsController {
     }
   };
 
-  deleteQna = async (req, res, next) => {};
+  deleteQna = async (req, res, next) => {
+    try {
+      await this.questionsService.deleteQna(req, res);
+
+      res.status(200).send({ ok: true, message: '게시글이 삭제되었습니다.' });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
+
+  selectQna = async (req, res, next) => {
+    try {
+      await this.questionsService.selectQna(req, res);
+      res.status(200).send({ ok: true, message: '채택되었습니다.' });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
 }
 
 module.exports = QuestionsController;

@@ -13,6 +13,10 @@ router
   .route('/:questionId')
   .get(questionsController.findByQna)
   .put(questionsController.updateQna)
-//   .delete(questionsController.deleteQna);
+  .delete(questionsController.deleteQna);
+
+router
+.route('/:questionId/:answerId')
+.put(questionsController.selectQna);
 
 module.exports = router;

@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false, // NOT NULL, Null을 허용하지 않음
         autoIncrement: true, // AUTO_INCREMENT
         primaryKey: true, // PRIMARY KEY, 기본키
-        unique: true, // UNIQUE, 유일한 값만 존재할 수 있음
         type: DataTypes.INTEGER,
       },
       userId: {
@@ -38,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       imgUrl: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -51,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Question',
+      modelName: 'Answer',
       timestamps: false,
     }
   );
