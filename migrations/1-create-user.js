@@ -10,22 +10,24 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       email: {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       password: {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       nickname: {
-        type: Sequelize.STRING,
-      },
-      userScore: {
-        type: Sequelize.INTEGER,
-      },
-      choice: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       avatar: {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+      },
+      score: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

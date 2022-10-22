@@ -9,23 +9,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      questionId: {
-        type: Sequelize.INTEGER,
-      },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+      },
+      questionId: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       content: {
-        type: Sequelize.STRING,
-      },
-      done: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       imgUrl: {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
