@@ -1,19 +1,20 @@
 const QuestionsRepository = require('../repositories/questions.repository');
+require('dotenv').config();
 
 class QuestionsService {
   questionsRepository = new QuestionsRepository();
 
   createQna = async (req, res, next) => {
-    //   const { user } = res.locals;
-    const { title, content, imgUrl } = req.body;
+    // const { userId } = res.locals.user;
+    const userId = 1;
+    const { title, content } = req.body;
 
     const qna = {
-      // userId: user.userId,
-      // nickname: user.nickname,
-      userId: 1,
+      userId,
       title,
       content,
-      imgUrl,
+      imgUrl:
+        'https://qportminiprojectmini.s3.ap-northeast-2.amazonaws.com/post/1666518459090.gif',
     };
 
     await this.questionsRepository.createQna(qna);
@@ -35,28 +36,26 @@ class QuestionsService {
 
   updateQna = async (req, res, next) => {
     const { questionId } = req.params;
-    const { title, content, imgUrl } = req.body;
-    // const {user}=res.locals
+    const { title, content } = req.body;
+    // const { userId } = res.locals.user;
+    const userId = 1;
     const findByWriter = await this.questionsRepository.findByQna(questionId);
 
-    // if (findByWriter.questionId !== questionId)
-    //   throw new Error('본인만 수정할 수 있습니다.');
+    if (findByWriter.userId !== userId)
+      throw new Error('본인만 수정할 수 있습니다.');
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
 
-    await this.questionsRepository.updateQna(
-      questionId,
-      title,
-      content,
-      imgUrl
-    );
+    await this.questionsRepository.updateQna(questionId, title, content);
   };
 
   deleteQna = async (req, res, next) => {
+    // const { userId } = res.locals.user;
+    const userId = 1;
     const { questionId } = req.params;
     const findByWriter = await this.questionsRepository.findByQna(questionId);
 
-    // if (findByWriter.questionId !== questionId)
-    //   throw new Error('본인만 수정할 수 있습니다.');
+    if (findByWriter.userId !== userId)
+      throw new Error('본인만 수정할 수 있습니다.');
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
 
     await this.questionsRepository.deleteQna(questionId);
@@ -64,14 +63,40 @@ class QuestionsService {
 
   selectQna = async (req, res, next) => {
     const { questionId, answerId } = req.params;
-    // const {user}=res.locals
+    // const { userId } = res.locals.user;
+    const userId = 1;
+
     const findByWriter = await this.questionsRepository.findByQna(questionId);
 
-    // if (findByWriter.questionId !== questionId)
-    //   throw new Error('본인만 채택할 수 있습니다.');
+    if (!findByWriter) throw new Error('잘못된 요청입니다.');
+    if (findByWriter.userId !== userId)
+      throw new Error('본인만 채택할 수 있습니다.');
+
+    // await this.questionsRepository.findByAnswerUser(answerId);
+    // const answerUserId = findByAnswerUserId.userId;
+    await this.questionsRepository.selectQna(
+      // answerUserId,
+      questionId,
+      answerId
+    );
+  };
+
+  updateImage = async (userId, questionId, imageFileName) => {
+    if (!imageFileName) throw new Error('게시물 이미지가 빈 값');
+    const findByWriter = await this.questionsRepository.findByQna(questionId);
+
+    if (findByWriter.userId !== userId)
+      throw new Error('본인만 수정할 수 있습니다.');
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
 
-    await this.questionsRepository.selectQna(questionId, answerId);
+    const updateImageData = await this.questionsRepository.updateImage(
+      questionId,
+      imageFileName
+    );
+
+    updateImageData.imgUrl =
+      process.env.S3_STORAGE_URL + updateImageData.imgUrl;
+    return updateImageData;
   };
 }
 

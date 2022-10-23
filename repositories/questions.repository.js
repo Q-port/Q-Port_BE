@@ -1,8 +1,9 @@
-const { Question } = require('../models');
+const { Question, User } = require('../models');
 
 class QuestionsRepository {
   constructor() {
     this.Question = Question;
+    this.User = User;
   }
 
   createQna = async (qna) => {
@@ -30,9 +31,9 @@ class QuestionsRepository {
     });
   };
 
-  updateQna = async (questionId, title, content, imgUrl) => {
+  updateQna = async (questionId, title, content) => {
     await this.Question.update(
-      { title, content, imgUrl, updatedAt: Date.now() },
+      { title, content, updatedAt: Date.now() },
       { where: { questionId } }
     );
   };
@@ -45,11 +46,32 @@ class QuestionsRepository {
     });
   };
 
-  selectQna = async (questionId, answerId) => {
+  selectQna = async (/**answerUserId,  */ questionId, answerId) => {
     await this.Question.update(
       { selectedAnswer: answerId },
       { where: { questionId } }
     );
+    // await this.User.increment(
+    //   { score: 1 },
+    //   { where: { userId: answerUserId } }
+    // );
+  };
+
+  updateImage = async (questionId, imgUrl) => {
+    try {
+      await this.Question.update(
+        {
+          imgUrl,
+        },
+        {
+          where: { questionId },
+        }
+      );
+
+      return await this.findByQna(questionId);
+    } catch (error) {
+      throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
+    }
   };
 }
 
