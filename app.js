@@ -13,12 +13,12 @@ const router = express.Router();
 const port = process.env.EXPRESS_PORT || 3000;
 
 // middlewares
+app.use(cors());
 app.use(cookieParser());
 app.use(helmet());
 app.use(express.json());
 app.use('/api/qnas', require('./routes/questions.route'));
 app.use(express.urlencoded({ extended: false }), router);
-app.use(cors());
 
 http.listen(port, () => {
   console.log(`Start listen Server: ${port}`);
