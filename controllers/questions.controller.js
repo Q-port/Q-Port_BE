@@ -84,7 +84,7 @@ class QuestionsController {
         questionId,
         imageFileName
       );
-      res.status(200).json({ image: imageData });
+      res.status(200).send({ ok: true, data: imageData });
     } catch (error) {
       res
         .status(error.status || 400)
