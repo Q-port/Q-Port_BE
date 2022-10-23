@@ -1,3 +1,4 @@
+const { update } = require('immutable');
 const QuestionsRepository = require('../repositories/questions.repository');
 require('dotenv').config();
 
@@ -8,13 +9,12 @@ class QuestionsService {
     // const { userId } = res.locals.user;
     const userId = 1;
     const { title, content } = req.body;
-
+    const num = (Math.ceil(Math.random() * 12) + '').padStart(2, '0');
     const qna = {
       userId,
       title,
       content,
-      imgUrl:
-        'https://qportminiprojectmini.s3.ap-northeast-2.amazonaws.com/post/1666518459090.gif',
+      imgUrl: `http://spartacodingclub.shop/static/images/rtans/SpartaIcon${num}.png`,
     };
 
     await this.questionsRepository.createQna(qna);
@@ -91,11 +91,9 @@ class QuestionsService {
 
     const updateImageData = await this.questionsRepository.updateImage(
       questionId,
-      imageFileName
+      process.env.S3_STORAGE_URL + imageFileName
     );
 
-    updateImageData.imgUrl =
-      process.env.S3_STORAGE_URL + updateImageData.imgUrl;
     return updateImageData;
   };
 }
