@@ -72,6 +72,25 @@ class QuestionsController {
         .send({ ok: false, message: error.message });
     }
   };
+
+  updateImage = async (req, res, next) => {
+    try {
+      const { questionId } = req.params;
+      // const { userId } = res.locals.user;
+      const userId = 1;
+      const imageFileName = req.file ? req.file.key : null;
+      const imageData = await this.questionsService.updateImage(
+        userId,
+        questionId,
+        imageFileName
+      );
+      res.status(200).json({ image: imageData });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
 }
 
 module.exports = QuestionsController;
