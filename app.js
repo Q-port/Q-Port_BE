@@ -10,6 +10,7 @@ const {
 } = require('./middlewares/error-hander.middleware');
 
 const cookieParser = require('cookie-parser');
+const indexRouter = require('./routes/index');
 
 const app = express();
 const http = Http.createServer(app);
@@ -25,9 +26,12 @@ app.use('/api/qnas', require('./routes/questions.route'));
 app.use(express.urlencoded({ extended: false }), router);
 app.use(errorLogger); // Error Logger
 app.use(errorHandler); // Error Handler
+app.use('/', require("./routes/signup.route"));
 
 http.listen(port, () => {
   console.log(`Start listen Server: ${port}`);
 });
 
 module.exports = http;
+
+
