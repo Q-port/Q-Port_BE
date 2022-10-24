@@ -17,8 +17,9 @@ app.use(cors());
 app.use(cookieParser());
 app.use(helmet());
 app.use(express.json());
-app.use('/api/qnas', require('./routes/questions.route'));
 app.use(express.urlencoded({ extended: false }), router);
+app.use('/api/qnas', require('./routes/questions.route'));
+app.use('/api/answers', require('./routes/answers.route'));
 
 http.listen(port, () => {
   console.log(`Start listen Server: ${port}`);
