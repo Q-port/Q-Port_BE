@@ -8,11 +8,7 @@ class QuestionsRepository {
 
   // 질문글 저장시 시간값 형식을 1666567749235 처럼 하기위해 Date.now() 적용
   createQna = async (qna) => {
-    await this.Question.create({
-      ...qna,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
+    await this.Question.create(qna);
   };
 
   // 질문글 목록 조회시 글쓴시간 기준으로 내림차순 정렬후 return
