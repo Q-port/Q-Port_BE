@@ -29,6 +29,14 @@ module.exports = {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: true,
       },
+      answerCount: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true,
+      },
+      view: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.STRING,
