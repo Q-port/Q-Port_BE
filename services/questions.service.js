@@ -10,13 +10,11 @@ class QuestionsService {
     const userId = 1;
     const { title, content } = req.body;
 
-    // 기본 이미지 테스트를 위한 랜덤 르탄이 url을 기본값으로 저장
-    const num = (Math.ceil(Math.random() * 12) + '').padStart(2, '0');
     const qna = {
       userId,
       title,
       content,
-      imgUrl: `http://spartacodingclub.shop/static/images/rtans/SpartaIcon${num}.png`,
+      imgUrl: 'defalt',
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
