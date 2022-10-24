@@ -17,6 +17,8 @@ class QuestionsService {
       title,
       content,
       imgUrl: `http://spartacodingclub.shop/static/images/rtans/SpartaIcon${num}.png`,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
 
     // 가공된 질문글 데이터를 repository로 전달

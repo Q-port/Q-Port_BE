@@ -24,7 +24,7 @@ router
    */
 router
   .route('/:questionId/image')
-  .put(upload.upload.single('postImage'), questionsController.updateImage);
+  .put(upload.upload.single('qnaImage'), questionsController.updateImage);
 
   /**
    * GET : 질문글 상세 조회
