@@ -36,6 +36,8 @@ class QuestionsController {
   findByQna = async (req, res, next) => {
     try {
       const detail = await this.questionsService.findByQna(req, res);
+      console.log(req.ip.split(':').pop());
+      console.log(req.headers['x-real-ip']);
 
       res.status(200).send({ ok: true, data: detail });
     } catch (error) {
