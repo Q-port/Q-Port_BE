@@ -20,12 +20,12 @@ class S3ImageController {
             where: { questionId, imgUrl: 'default' },
           })
             .then(() => {
-              return cb(new Error('이미지 파일이 아닙니다!'));
+              return cb(new Error('지원되는 이미지 파일이 아닙니다!'));
             })
             .catch((err) => {
-              return cb(new Error('이미지 파일이 아닙니다! + 게시물 없음'));
+              return cb(new Error('지원되는 이미지 파일이 아니거나 게시물이 없습니다!'));
             });
-          return cb(new Error('이미지 파일이 아닙니다!'));
+          return cb(new Error('지원되는 이미지 파일이 아닙니다!'));
         }
 
         cb(null, `post/${Date.now()}.${ext}`);
