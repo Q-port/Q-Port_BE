@@ -35,9 +35,8 @@ class QuestionsController {
   // return된 질문글 상세조회 데이터를 전달
   findByQna = async (req, res, next) => {
     try {
+      await this.questionsService.qnaViewCheck(req);
       const detail = await this.questionsService.findByQna(req, res);
-      console.log(req.ip.split(':').pop());
-      console.log(req.headers['x-real-ip']);
 
       res.status(200).send({ ok: true, data: detail });
     } catch (error) {

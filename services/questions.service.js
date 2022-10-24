@@ -122,6 +122,25 @@ class QuestionsService {
 
     return updateImageData;
   };
+  // 게시물이 조회될때 마다 확인해서 30000ms (5초)
+  // 이상이거나 테이블 안에 아이피가 없으면 view++
+  qnaViewCheck = async (req) => {
+    const { questionId } = req.params;
+    const ipAdress = req.ip.split(':').pop();
+    const getTime = Date.now();
+    const existIp = await this.questionsRepository.qnaViewCheck(ipAdress);
+
+    if (!existIp)
+      await this.questionsRepository.createView(ipAdress, getTime, questionId);
+    const intervalCount =
+      Date.now().toString().substring(7) - existIp.time.substring(7) > 30000;
+    if (intervalCount)
+      await this.questionsRepository.qnaViewCount({
+        ipAdress,
+        time: Date.now(),
+        questionId,
+      });
+  };
 }
 
 module.exports = QuestionsService;
