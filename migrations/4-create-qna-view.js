@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
       },
+      questionId: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+      },
       time: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
