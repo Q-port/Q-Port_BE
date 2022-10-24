@@ -1,9 +1,10 @@
-const { Question, User } = require('../models');
+const { Question, User, qnaView } = require('../models');
 
 class QuestionsRepository {
   constructor() {
     this.Question = Question;
     this.User = User;
+    this.qnaView = qnaView;
   }
 
   // 질문글 저장시 시간값 형식을 1666567749235 처럼 하기위해 Date.now() 적용
@@ -76,6 +77,20 @@ class QuestionsRepository {
     } catch (error) {
       throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
     }
+  };
+
+  qnaViewCheck = async (ip) => {
+    const result = await this.qnaView.findOne({ where: { ip } });
+    return result;
+  };
+  createView = async (ip, time, questionId) => {
+    await this.qnaView.create({ ip, time });
+    await this.Question.increment({ view: 1 }, { where: { questionId } });
+  };
+
+  qnaViewCount = async ({ ipAdress, time, questionId }) => {
+    await this.qnaView.update({ time }, { where: { ip: ipAdress } });
+    await this.Question.increment({ view: 1 }, { where: { questionId } });
   };
 }
 
