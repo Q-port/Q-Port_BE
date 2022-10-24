@@ -1,7 +1,9 @@
 const AnswersRepository = require('../repositories/answers.repository');
+const QuestionsRepository = require('../repositories/questions.repository');
 
 class AnswersService {
   answersRepository = new AnswersRepository();
+  questionsRepository = new QuestionsRepository();
 
   // 답변 작성
   createAnswer = async (req, res, next) => {
@@ -22,6 +24,11 @@ class AnswersService {
       userId
     );
     if (isDuplicate) throw new Error('답변을 중복해서 작성할 수 없습니다.');
+
+    // 해결된 게시글에 답변 작성 불가
+    // const isDone = await this.questionsRepository.findByQna(questionId)
+    //   .selectedAnswer;
+    // if (isDone) throw new Error('해결완료 된 질문에 답변할 수 없습니다.');
 
     await this.answersRepository.createAnswer(answer);
 
