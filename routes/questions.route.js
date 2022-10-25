@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middlewares/authMiddlewares');
 
 const QuestionsController = require('../controllers/questions.controller');
 const questionsController = new QuestionsController();
@@ -16,7 +17,7 @@ const upload = new Upload();
  */
 router
   .route('/')
-  .post(questionsController.createQna)
+  .post(auth, questionsController.createQna)
   .get(questionsController.getQna);
 
 /**
@@ -24,7 +25,7 @@ router
  */
 router
   .route('/:questionId/image')
-  .put(upload.upload.single('qnaImage'), questionsController.updateImage);
+  .put(auth, upload.upload.single('qnaImage'), questionsController.updateImage);
 
 /**
  * GET : 질문글 상세 조회
@@ -34,13 +35,13 @@ router
 router
   .route('/:questionId')
   .get(questionsController.findByQna)
-  .put(questionsController.updateQna)
-  .delete(questionsController.deleteQna);
+  .put(auth, questionsController.updateQna)
+  .delete(auth, questionsController.deleteQna);
 
 /**
  * PUT : 질문자 채택
  */
-router.route('/:questionId/:answerId').put(questionsController.selectQna);
+router.route('/:questionId/:answerId').put(auth, questionsController.selectQna);
 
 router.route('/users/:userId').get(questionsController.myQuestions);
 
