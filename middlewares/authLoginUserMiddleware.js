@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
       });
     }
 
-
     next();
   } catch (error) {
     console.trace(error);
