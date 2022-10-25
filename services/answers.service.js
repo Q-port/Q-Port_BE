@@ -8,7 +8,7 @@ class AnswersService {
   // 답변 작성
   createAnswer = async (req, res, next) => {
     // const { userId } = res.locals.user;
-    const userId = 1;
+    const userId = 5;
     const { questionId } = req.params;
     const { title, content } = req.body;
     const answer = {
@@ -18,6 +18,12 @@ class AnswersService {
       content,
     };
 
+    // 해결된 게시글에 답변 작성 불가
+    const isDone = await this.questionsRepository.findByQna(questionId);
+
+    if (isDone.selectedAnswer > 0)
+      throw new Error('해결완료 된 질문에 답변할 수 없습니다.');
+
     // user별 답변 중복작성 불가
     const isDuplicate = await this.answersRepository.findByDuplicate(
       questionId,
@@ -25,10 +31,12 @@ class AnswersService {
     );
     if (isDuplicate) throw new Error('답변을 중복해서 작성할 수 없습니다.');
 
-    // 해결된 게시글에 답변 작성 불가
-    // const isDone = await this.questionsRepository.findByQna(questionId)
-    //   .selectedAnswer;
-    // if (isDone) throw new Error('해결완료 된 질문에 답변할 수 없습니다.');
+    // 한 질문에 답변 10개 제한
+    const answerCount = await this.answersRepository.answerCountByQuestionId(
+      questionId
+    );
+    if (answerCount === 10)
+      throw new Error('한 질문에 대한 답변은 10개를 넘을 수 없습니다.');
 
     await this.answersRepository.createAnswer(answer);
 

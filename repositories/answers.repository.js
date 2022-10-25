@@ -53,6 +53,11 @@ class AnswersRepository {
     });
   };
 
+  // questionId에 따른 답변 갯수 카운트
+  answerCountByQuestionId = async (questionId) => {
+    return await Answer.count({ where: { questionId: questionId } });
+  };
+
   // 이미지 업로드
   updateImage = async (questionId, imgUrl) => {};
 }
