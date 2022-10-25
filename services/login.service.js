@@ -17,7 +17,7 @@ class LoginService {
       expiresIn: '1h',
     });
 
-    return { token };
+    return  token ;
   };
 }
 
