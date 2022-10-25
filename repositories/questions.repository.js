@@ -16,7 +16,7 @@ class QuestionsRepository {
   getQna = async () => {
     return await this.Question.findAll({
       attributes: {
-        exclude: ['content'],
+        exclude: ['content', 'imgUrl'],
       },
       order: [['createdAt', 'desc']],
     });
@@ -91,6 +91,20 @@ class QuestionsRepository {
   qnaViewCount = async ({ ip, time, questionId }) => {
     await this.qnaView.update({ time }, { where: { ip, questionId } });
     await this.Question.increment({ view: 1 }, { where: { questionId } });
+  };
+
+  myQuestions = async (userId) => {
+    return await this.Question.findAll(
+      {
+        attributes: {
+          exclude: ['content', 'imgUrl'],
+        },
+        order: [['createdAt', 'desc']],
+      },
+      {
+        where: { userId },
+      }
+    );
   };
 }
 
