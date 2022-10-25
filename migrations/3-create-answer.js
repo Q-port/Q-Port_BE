@@ -17,9 +17,13 @@ module.exports = {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
       },
-      title: {
+      nickname: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
+      },
+      avatar: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: true,
       },
       content: {
         type: Sequelize.DataTypes.STRING,

@@ -10,19 +10,17 @@ class QuestionsService {
     const userId = 1;
     const { title, content } = req.body;
 
-    // 기본 이미지 테스트를 위한 랜덤 르탄이 url을 기본값으로 저장
-    const num = (Math.ceil(Math.random() * 12) + '').padStart(2, '0');
     const qna = {
       userId,
       title,
       content,
-      imgUrl: `http://spartacodingclub.shop/static/images/rtans/SpartaIcon${num}.png`,
+      imgUrl: 'defalt',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
 
     // 가공된 질문글 데이터를 repository로 전달
     await this.questionsRepository.createQna(qna);
-
-    res.status(200);
   };
 
   getQna = async (req, res, next) => {
@@ -121,6 +119,32 @@ class QuestionsService {
     );
 
     return updateImageData;
+  };
+  // 게시물이 조회될때 마다 확인해서 30000ms (5초)
+  // 이상이거나 테이블 안에 아이피가 없으면 view++
+  qnaViewCheck = async (req) => {
+    const { questionId } = req.params;
+    const ipAdress = req.ip.split(':').pop();
+    const getTime = Date.now();
+    const existIp = await this.questionsRepository.qnaViewCheck({
+      ip: ipAdress,
+      questionId,
+    });
+
+    if (!existIp)
+      return await this.questionsRepository.createView({
+        questionId,
+        ip: ipAdress,
+        time: getTime,
+      });
+    const intervalCount =
+      getTime.toString().substring(7) - existIp.time.substring(7) > 5000;
+    if (intervalCount)
+      await this.questionsRepository.qnaViewCount({
+        ip: ipAdress,
+        time: getTime,
+        questionId,
+      });
   };
 }
 

@@ -1,18 +1,15 @@
-const { Question, User } = require('../models');
+const { Question, User, qnaView } = require('../models');
 
 class QuestionsRepository {
   constructor() {
     this.Question = Question;
     this.User = User;
+    this.qnaView = qnaView;
   }
 
   // 질문글 저장시 시간값 형식을 1666567749235 처럼 하기위해 Date.now() 적용
   createQna = async (qna) => {
-    await this.Question.create({
-      ...qna,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
+    await this.Question.create(qna);
   };
 
   // 질문글 목록 조회시 글쓴시간 기준으로 내림차순 정렬후 return
@@ -80,6 +77,20 @@ class QuestionsRepository {
     } catch (error) {
       throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
     }
+  };
+
+  qnaViewCheck = async ({ ip, questionId }) => {
+    const result = await this.qnaView.findOne({ where: { ip, questionId } });
+    return result;
+  };
+  createView = async ({ questionId, ip, time }) => {
+    await this.qnaView.create({ questionId, ip, time });
+    await this.Question.increment({ view: 1 }, { where: { questionId } });
+  };
+
+  qnaViewCount = async ({ ip, time, questionId }) => {
+    await this.qnaView.update({ time }, { where: { ip, questionId } });
+    await this.Question.increment({ view: 1 }, { where: { questionId } });
   };
 }
 

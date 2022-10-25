@@ -1,4 +1,5 @@
 const QuestionsService = require('../services/questions.service');
+const joi = require('../util/joi');
 
 class QuestionsController {
   questionsService = new QuestionsService();
@@ -6,6 +7,9 @@ class QuestionsController {
   // 작성여부에 따른 status를 클라이언트로 전달
   createQna = async (req, res, next) => {
     try {
+      // body로 받아오는 title, content 검증
+      await joi.questionSchema.validateAsync(req.body);
+
       await this.questionsService.createQna(req, res);
 
       res.status(200).send({ ok: true, message: '질문 작성 완료' });
@@ -31,6 +35,7 @@ class QuestionsController {
   // return된 질문글 상세조회 데이터를 전달
   findByQna = async (req, res, next) => {
     try {
+      await this.questionsService.qnaViewCheck(req);
       const detail = await this.questionsService.findByQna(req, res);
 
       res.status(200).send({ ok: true, data: detail });
@@ -44,6 +49,9 @@ class QuestionsController {
   // 수정 성공 여부에 따른 status를 전달
   updateQna = async (req, res, next) => {
     try {
+      // body로 받아오는 title, content 검증
+      await joi.questionSchema.validateAsync(req.body);
+
       await this.questionsService.updateQna(req, res);
 
       res.status(200).send({ ok: true, message: '게시글이 수정되었습니다.' });

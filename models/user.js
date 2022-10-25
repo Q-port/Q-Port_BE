@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      score: {
+      selectedAnswer: {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0,
