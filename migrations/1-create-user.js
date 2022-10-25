@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         allowNull: true,
       },
-      score: {
+      selectedAnswer: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: true,
       },

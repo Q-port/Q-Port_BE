@@ -21,8 +21,6 @@ class QuestionsService {
 
     // 가공된 질문글 데이터를 repository로 전달
     await this.questionsRepository.createQna(qna);
-
-    res.status(200);
   };
 
   getQna = async (req, res, next) => {
@@ -140,7 +138,7 @@ class QuestionsService {
         time: getTime,
       });
     const intervalCount =
-      getTime.toString().substring(7) - existIp.time.substring(7) > 30000;
+      getTime.toString().substring(7) - existIp.time.substring(7) > 5000;
     if (intervalCount)
       await this.questionsRepository.qnaViewCount({
         ip: ipAdress,
