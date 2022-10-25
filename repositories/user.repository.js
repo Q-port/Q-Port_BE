@@ -2,19 +2,18 @@ const { User } = require('../models');
 
 class UserRepository {
 
-  //내정보조회
-  findOneUser = async (userId) =>{
-    const mypage = await User.findByPk(userId)
+  // //내정보조회
+  // findOneUser = async (userId) =>{
+  //   const mypage = await User.findByPk(userId)
 
-    return mypage;
-  }
+  //   return mypage;
+  // }
 
 
   //회원정보조회
 findOneUser = async (userId) =>{
-    const userpage = await User.findByPk(userId)
 
-    return userpage;
+    return await User.findByPk(userId)
   }
 
     // 회원정보수정
