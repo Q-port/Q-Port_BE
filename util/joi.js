@@ -27,7 +27,6 @@ module.exports = {
   loginSchema: Joi.object({
     email: Joi.string()
       .min(3)
-      .alphanum()
       .required()
       .error(new Error('이메일 또는 패스워드를 확인해주세요.')),
     password: Joi.string()
@@ -37,6 +36,11 @@ module.exports = {
   }),
   questionSchema: Joi.object({
     title: Joi.string().required().error(new Error('제목을 입력해주세요.')),
+    content: Joi.string().required().error(new Error('내용을 입력해주세요.')),
+  }),
+
+  // 답변 게시 유효성 검사
+  AnswerSchema: Joi.object({
     content: Joi.string().required().error(new Error('내용을 입력해주세요.')),
   }),
 };

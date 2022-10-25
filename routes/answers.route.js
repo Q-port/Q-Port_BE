@@ -20,7 +20,10 @@ router
   .put(answersController.updateAnswer)
   .delete(answersController.deleteAnswer);
 
-//  답변에 이미지 등록
+//  답변에 이미지 등록 /api/answers/:answerId/image
 router.route('/:answerId/image');
+
+//  내가 작성한 답변글 목록 받기 /api/answers/users/:userId
+router.route('/users/:userId').get(answersController.getMyAnswers);
 
 module.exports = router;
