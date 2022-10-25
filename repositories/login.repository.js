@@ -1,8 +1,9 @@
-const { Users } = require('../models');
+const { User } = require('../models');
 
 class LoginRepository {
   findUser = async (email, password) => {
-    const user = await Users.findOne({ where: {  email, password } });
+
+    const user = await User.findOne({ where: {  email, password } });
     return user;
   };
 }
