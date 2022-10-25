@@ -6,7 +6,7 @@ const errorLogger = (error, request, response, next) => {
 const errorHandler = (error, req, res, next) => {
   const status = error.status || 400;
   res.status(status);
-  res.json({ errorMessage: error.message });
+  res.json({ ok: false, message: error.message });
 };
 
 module.exports = { errorLogger, errorHandler };
