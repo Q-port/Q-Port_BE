@@ -1,8 +1,9 @@
-const { Question, User, qnaView } = require('../models');
+const { Question, Answer, User, qnaView } = require('../models');
 
 class QuestionsRepository {
   constructor() {
     this.Question = Question;
+    this.Answer = Answer;
     this.User = User;
     this.qnaView = qnaView;
   }
@@ -56,7 +57,7 @@ class QuestionsRepository {
       { where: { questionId } }
     );
     await this.User.increment(
-      { score: 1 },
+      { selectedAnswer: 1 },
       { where: { userId: answerUserId } }
     );
   };
@@ -105,6 +106,10 @@ class QuestionsRepository {
         where: { userId },
       }
     );
+  };
+
+  findByAnswerUser = async (answerId) => {
+    return await this.Answer.findByPk(answerId);
   };
 }
 
