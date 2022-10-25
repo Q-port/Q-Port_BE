@@ -27,6 +27,7 @@ app.use(errorLogger); // Error Logger
 app.use(errorHandler); // Error Handler
 app.use('/api', require('./routes/signup.route'));
 app.use('/api', require('./routes/login.route'));
+app.use('/api', require('./routes/user.route'));
 app.use('/api/qnas', require('./routes/questions.route'));
 app.use('/api/answers', require('./routes/answers.route'));
 

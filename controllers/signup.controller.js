@@ -1,3 +1,4 @@
+const { sign } = require('jsonwebtoken');
 const SignupService = require('../services/signup.service');
 
 
@@ -24,11 +25,16 @@ class SignupController {
       });
     }
 
-    const signup = await this.signupService.signup(email, nickname, password);
-    res.send ({message: "1234"})
+    const signup = await this.signupService.findUser(email, nickname)
+    if (signup){
+      return res.status(400).send({
+        errorMessage:"닉네임이나 이메일이 중복되었습니다"
+      })
+    } else {
+      await this.signupService.signup(email, nickname, password)
+     return res.send ({message: "회원가입완료"})
+    }
   };
-
-
 }
 
 module.exports = SignupController;
