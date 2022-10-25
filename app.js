@@ -27,6 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }), router);
 app.use('/api', require('./routes/signup.route'));
 app.use('/api', require('./routes/login.route'));
+app.use('/api', require('./routes/user.route'));
 app.use('/api/qnas', require('./routes/questions.route'));
 app.use('/api/answers', require('./routes/answers.route'));
 app.use(errorLogger); // Error Logger
