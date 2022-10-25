@@ -25,12 +25,12 @@ app.use(helmet());
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }), router);
-app.use(errorLogger); // Error Logger
-app.use(errorHandler); // Error Handler
 app.use('/api', require('./routes/signup.route'));
 app.use('/api', require('./routes/login.route'));
 app.use('/api/qnas', require('./routes/questions.route'));
 app.use('/api/answers', require('./routes/answers.route'));
+app.use(errorLogger); // Error Logger
+app.use(errorHandler); // Error Handler
 
 http.listen(port, () => {
   console.log(`Start listen Server: ${port}`);

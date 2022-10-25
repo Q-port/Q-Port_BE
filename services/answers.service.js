@@ -18,10 +18,12 @@ class AnswersService {
       content,
     };
     // 본인 질문에 답변 작성 불가
+    const isMyQuestion = await this.questionsRepository.findByQna(questionId);
+    if (isMyQuestion.userId === user.userId)
+      throw new Error('본인의 질문에 답변할 수 없습니다.');
 
     // 해결된 게시글에 답변 작성 불가
     const isDone = await this.questionsRepository.findByQna(questionId);
-
     if (isDone.selectedAnswer > 0)
       throw new Error('해결완료 된 질문에 답변할 수 없습니다.');
 
@@ -40,6 +42,7 @@ class AnswersService {
       throw new Error('한 질문에 대한 답변은 10개를 넘을 수 없습니다.');
 
     await this.answersRepository.createAnswer(answer);
+    await this.answersRepository.addAnswerCount({ questionId });
 
     res.status(200);
   };
@@ -47,7 +50,9 @@ class AnswersService {
   // 답변 불러오기
   getAnswer = async (req, res, next) => {
     const { questionId } = req.params;
-    const answer = await this.answersRepository.findByQuestionId(questionId);
+    const answer = await this.answersRepository.findByQuestionId({
+      questionId,
+    });
     if (!questionId || !answer) throw new Error('잘못된 요청 입니다.');
 
     return answer;
@@ -71,15 +76,18 @@ class AnswersService {
   deleteAnswer = async (req, res, next) => {
     const { user } = res.locals;
     const { answerId } = req.params;
-    const findByWriter = await this.answersRepository.findByAnswerId(answerId);
+    const answer = await this.answersRepository.findByAnswerId(answerId);
 
-    if (findByWriter.userId !== user.userId)
+    if (answer.userId !== user.userId)
       throw new Error('본인만 삭제할 수 있습니다.');
-    if (!findByWriter) throw new Error('잘못된 요청입니다.');
+    if (!answer) throw new Error('잘못된 요청입니다.');
 
     await this.answersRepository.deleteAnswer(answerId);
+    const questionId = answer.questionId;
+    await this.answersRepository.subtractAnswerCount({ questionId });
   };
 
+  // 이미지
   updateImage = async (userId, answersId, imageFileName) => {
     if (!imageFileName) throw new Error('게시물 이미지가 빈 값');
     const findByWriter = await this.answersRepository.findByQna(answersId);
@@ -96,6 +104,7 @@ class AnswersService {
     return updateImageData;
   };
 
+  // userId기준 답변 목록 불러오기
   findByUserId = async (req, res) => {
     const { userId } = req.params;
     return this.answersRepository.findByUserId(userId);

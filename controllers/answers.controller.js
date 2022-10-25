@@ -1,3 +1,4 @@
+const joi = require('../util/joi');
 const AnswersService = require('../services/answers.service');
 
 class AnswersController {
@@ -6,14 +7,13 @@ class AnswersController {
   // 답변 작성
   createAnswer = async (req, res, next) => {
     try {
+      await joi.AnswerWriteSchema.validateAsync(req.body);
+
       await this.answersService.createAnswer(req, res);
 
       res.status(200).send({ ok: true, message: '답변 작성 완료' });
     } catch (error) {
-      console.log(error);
-      res
-        .status(error.status || 400)
-        .send({ ok: false, message: error.message });
+      next(error);
     }
   };
 
@@ -23,23 +23,20 @@ class AnswersController {
       const answer = await this.answersService.getAnswer(req, res);
       res.status(200).send({ ok: true, data: answer });
     } catch (error) {
-      res
-        .status(error.status || 400)
-        .send({ ok: false, message: error.message });
+      next(error);
     }
   };
 
   // 답변 수정
   updateAnswer = async (req, res, next) => {
     try {
+      await joi.AnswerWriteSchema.validateAsync(req.body);
+
       await this.answersService.updateAnswer(req, res);
 
       res.status(200).send({ ok: true, message: '답변이 수정되었습니다.' });
     } catch (error) {
-      console.log(error);
-      res
-        .status(error.status || 400)
-        .send({ ok: false, message: error.message });
+      next(error);
     }
   };
 
@@ -50,9 +47,7 @@ class AnswersController {
 
       res.status(200).send({ ok: true, message: '답변이 삭제되었습니다.' });
     } catch (error) {
-      res
-        .status(error.status || 400)
-        .send({ ok: false, message: error.message });
+      next(error);
     }
   };
 
@@ -66,10 +61,7 @@ class AnswersController {
 
       res.status(200).send({ data: answers });
     } catch (error) {
-      console.log(error);
-      res
-        .status(error.status || 400)
-        .send({ ok: false, message: error.message });
+      next(error);
     }
   };
 }

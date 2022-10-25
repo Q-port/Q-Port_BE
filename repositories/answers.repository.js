@@ -1,4 +1,4 @@
-const { Answer, User } = require('../models');
+const { Question, Answer, User } = require('../models');
 
 class AnswersRepository {
   constructor() {
@@ -58,6 +58,15 @@ class AnswersRepository {
         answerId,
       },
     });
+  };
+
+  // 대상 질문글에 답변 갯수 증가
+  addAnswerCount = async (questionId) => {
+    await Question.increment({ answerCount: 1 }, { where: questionId });
+  };
+  // 대상 질문글에 답변 갯수 감소
+  subtractAnswerCount = async (questionId) => {
+    await Question.increment({ answerCount: -1 }, { where: questionId });
   };
 
   // questionId에 따른 답변 갯수 카운트
