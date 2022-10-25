@@ -9,13 +9,18 @@ class QuestionsService {
     const { user } = res.locals;
 
     const { title, content } = req.body;
+    const imageFileName = req.file ? req.file.key : null;
 
+    const imgUrl = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : null;
     const qna = {
       userId: user.userId,
       nickname: user.nickname,
       avatar: user.avatar,
       title,
       content,
+      imgUrl,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -52,7 +57,18 @@ class QuestionsService {
     if (findByWriter.userId !== userId)
       throw new Error('본인만 수정할 수 있습니다.');
 
-    await this.questionsRepository.updateQna(questionId, title, content);
+    const imageFileName = req.file ? req.file.key : null;
+    const imgUrl = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : null;
+
+    await this.questionsRepository.updateQna({
+      questionId,
+      title,
+      content,
+      imgUrl,
+      updatedAt: Date.now(),
+    });
   };
 
   // 삭제하기 위해 로그인된 유저와 질문글게시자 일치 여부 검증
@@ -99,7 +115,7 @@ class QuestionsService {
 
   // 질문글의 id와 로그인된 유저의 id, 이미지 파일 이름을 repository로 전달
   updateImage = async (userId, questionId, imageFileName) => {
-    if (!imageFileName) throw new Error('이미지를 업로드 해주세요.ㅋ');
+    if (!imageFileName) throw new Error('이미지를 업로드 해주세요.');
 
     // 질문글게시자와 로그인된 유저가 같은지 검증
     const findByWriter = await this.questionsRepository.findByQna(questionId);
