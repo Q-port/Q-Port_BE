@@ -27,9 +27,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      title: {
+      nickname: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      avatart: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       content: {
         type: DataTypes.STRING,

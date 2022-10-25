@@ -4,8 +4,13 @@ const express = require('express');
 const Http = require('http');
 const cors = require('cors');
 const helmet = require('helmet');
+const {
+  errorHandler,
+  errorLogger,
+} = require('./middlewares/error-hander.middleware');
 
 const cookieParser = require('cookie-parser');
+const indexRouter = require('./routes/index');
 
 const app = express();
 const http = Http.createServer(app);
@@ -18,6 +23,9 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }), router);
+app.use(errorLogger); // Error Logger
+app.use(errorHandler); // Error Handler
+app.use('/', require('./routes/signup.route'));
 app.use('/api/qnas', require('./routes/questions.route'));
 app.use('/api/answers', require('./routes/answers.route'));
 

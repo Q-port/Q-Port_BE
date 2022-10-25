@@ -2,44 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
-      userId: {
+    await queryInterface.createTable('qnaViews', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      email: {
+      ip: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
       },
-      password: {
+      questionId: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
       },
-      nickname: {
+      time: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
-      },
-      avatar: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: true,
-      },
-      selectedAnswer: {
-        type: Sequelize.DataTypes.INTEGER,
-        allowNull: true,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.STRING,
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('qnaViews');
   },
 };

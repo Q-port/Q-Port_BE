@@ -13,6 +13,14 @@ module.exports = {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
       },
+      nickname: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+      },
+      avatar: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: true,
+      },
       title: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
@@ -26,6 +34,14 @@ module.exports = {
         allowNull: true,
       },
       selectedAnswer: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true,
+      },
+      answerCount: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: true,
+      },
+      view: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: true,
       },
