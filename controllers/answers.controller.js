@@ -60,12 +60,13 @@ class AnswersController {
   updateImage = async (req, res, next) => {};
 
   // 내가 작성한 답변글 목록 받기
-  getMyAnswers = async (req, res, next) => {
+  findByUserId = async (req, res, next) => {
     try {
-      const answers = await this.answersService.getMyAnswers(req, res);
+      const answers = await this.answersService.findByUserId(req, res);
 
       res.status(200).send({ data: answers });
     } catch (error) {
+      console.log(error);
       res
         .status(error.status || 400)
         .send({ ok: false, message: error.message });

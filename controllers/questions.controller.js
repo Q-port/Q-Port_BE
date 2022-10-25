@@ -91,8 +91,7 @@ class QuestionsController {
   updateImage = async (req, res, next) => {
     try {
       const { questionId } = req.params;
-      // const { userId } = res.locals.user;
-      const userId = 1;
+      const { userId } = res.locals.user;
 
       // 미들웨어를 통해 받은 file이 존재하지 않으면 null로 전달
       const imageFileName = req.file ? req.file.key : null;

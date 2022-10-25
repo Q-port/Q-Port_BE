@@ -50,15 +50,15 @@ class QuestionsRepository {
 
   // 질문글의 id를 받아와 질문글의 채택란에 답변글의 id를 저장
   // 답변글의 id를 받아와 답변글 게시자의 userId를 찾아 채택횟수를 증가
-  selectQna = async (/**answerUserId,  */ questionId, answerId) => {
+  selectQna = async (answerUserId, questionId, answerId) => {
     await this.Question.update(
       { selectedAnswer: answerId },
       { where: { questionId } }
     );
-    // await this.User.increment(
-    //   { score: 1 },
-    //   { where: { userId: answerUserId } }
-    // );
+    await this.User.increment(
+      { score: 1 },
+      { where: { userId: answerUserId } }
+    );
   };
 
   // 질문글의 id를 받아와 s3이미지주소를 저장
