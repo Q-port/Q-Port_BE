@@ -24,7 +24,7 @@ class QuestionsController {
   getQna = async (req, res, next) => {
     try {
       const qna = await this.questionsService.getQna();
-      res.status(200).send({ ok: true, data: qna });
+      res.status(200).json({ data: qna });
     } catch (error) {
       res
         .status(error.status || 400)
@@ -38,7 +38,7 @@ class QuestionsController {
       await this.questionsService.qnaViewCheck(req);
       const detail = await this.questionsService.findByQna(req, res);
 
-      res.status(200).send({ ok: true, data: detail });
+      res.status(200).json({ data: detail });
     } catch (error) {
       res
         .status(error.status || 400)
@@ -101,7 +101,18 @@ class QuestionsController {
         questionId,
         imageFileName
       );
-      res.status(200).send({ ok: true, data: imageData });
+      res.status(200).json({ data: imageData });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
+
+  myQuestions = async (req, res, next) => {
+    try {
+      const myQuestions = await this.questionsService.myQuestions(req, res);
+      res.status(200).json({ data: myQuestions });
     } catch (error) {
       res
         .status(error.status || 400)
