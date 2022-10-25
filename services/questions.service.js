@@ -6,20 +6,16 @@ class QuestionsService {
 
   // 작성될 질문글의 제목과 내용을 받아 repository로 전달
   createQna = async (req, res, next) => {
-    // const { user } = res.locals;
+    const { user } = res.locals;
 
     const { title, content } = req.body;
 
     const qna = {
-      // userId: userId,
-      // nickname: user.nickname,
-      // avatar: user.avatar,
-      userId: 1,
-      nickname: 'testUser',
-      avatar: 'defalt',
+      userId: user.userId,
+      nickname: user.nickname,
+      avatar: user.avatar,
       title,
       content,
-      imgUrl: 'defalt',
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -47,33 +43,29 @@ class QuestionsService {
   updateQna = async (req, res, next) => {
     const { questionId } = req.params;
     const { title, content } = req.body;
-    // const { userId } = res.locals.user;
-    const userId = 1;
+    const { userId } = res.locals.user;
 
     // 질문글게시자와 로그인된 유저가 같은지 검증
     const findByWriter = await this.questionsRepository.findByQna(questionId);
-    if (findByWriter.userId !== userId)
-      throw new Error('본인만 수정할 수 있습니다.');
-
     // 요청한 질문글이 존재하지 않을 때 예외처리
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
+    if (findByWriter.userId !== userId)
+      throw new Error('본인만 수정할 수 있습니다.');
 
     await this.questionsRepository.updateQna(questionId, title, content);
   };
 
   // 삭제하기 위해 로그인된 유저와 질문글게시자 일치 여부 검증
   deleteQna = async (req, res, next) => {
-    // const { userId } = res.locals.user;
-    const userId = 1;
+    const { userId } = res.locals.user;
     const { questionId } = req.params;
 
     // 질문글게시자와 로그인된 유저가 같은지 검증
     const findByWriter = await this.questionsRepository.findByQna(questionId);
-    if (findByWriter.userId !== userId)
-      throw new Error('본인만 수정할 수 있습니다.');
-
     // 요청한 질문글이 존재하지 않을 때 예외처리
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
+    if (findByWriter.userId !== userId)
+      throw new Error('본인만 수정할 수 있습니다.');
 
     // 질문글의 id를 전달
     await this.questionsRepository.deleteQna(questionId);
@@ -83,23 +75,23 @@ class QuestionsService {
   // 받아와 검증 후 repository로 전달
   selectQna = async (req, res, next) => {
     const { questionId, answerId } = req.params;
-    // const { userId } = res.locals.user;
-    const userId = 1;
+    const { userId } = res.locals.user;
 
     // 질문글게시자와 로그인된 유저가 같은지 검증
     const findByWriter = await this.questionsRepository.findByQna(questionId);
+    // 요청한 질문글이 존재하지 않을 때 예외처리
+    if (!findByWriter) throw new Error('잘못된 요청입니다.');
     if (findByWriter.userId !== userId)
       throw new Error('본인만 채택할 수 있습니다.');
 
-    // 요청한 질문글이 존재하지 않을 때 예외처리
-    if (!findByWriter) throw new Error('잘못된 요청입니다.');
-
-    // await this.questionsRepository.findByAnswerUser(answerId);
-    // const answerUserId = findByAnswerUserId.userId;
+    const findByAnswerUserId = await this.questionsRepository.findByAnswerUser(
+      answerId
+    );
+    const answerUserId = findByAnswerUserId.userId;
 
     // 답변글 게시자의 userId와 질문글 id, 답변글 id를 전달
     await this.questionsRepository.selectQna(
-      // answerUserId,
+      answerUserId,
       questionId,
       answerId
     );
