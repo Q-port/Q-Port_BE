@@ -5,10 +5,8 @@ class UserController {
   
   //내정보조회
  getUser = async (req,res) => {
-  const {userId} =res.locals.user
-  const mypage = await this.userService.findUser(userId)
-
-  res.status(200).json({data:mypage})
+ 
+  res.status(200).json({data:res.locals})
  }
 
   //회원정보조회
