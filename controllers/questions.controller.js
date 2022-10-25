@@ -50,7 +50,6 @@ class QuestionsController {
   updateQna = async (req, res, next) => {
     try {
       // body로 받아오는 title, content 검증
-      await joi.questionSchema.validateAsync(req.body);
 
       await this.questionsService.updateQna(req, res);
 

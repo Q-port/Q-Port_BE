@@ -17,15 +17,8 @@ const upload = new Upload();
  */
 router
   .route('/')
-  .post(auth, questionsController.createQna)
+  .post(auth, upload.upload.single('qnaImage'), questionsController.createQna)
   .get(questionsController.getQna);
-
-/**
- * PUT : 질문글 이미지 업로드 API
- */
-router
-  .route('/:questionId/image')
-  .put(auth, upload.upload.single('qnaImage'), questionsController.updateImage);
 
 /**
  * GET : 질문글 상세 조회
@@ -35,7 +28,7 @@ router
 router
   .route('/:questionId')
   .get(questionsController.findByQna)
-  .put(auth, questionsController.updateQna)
+  .put(auth, upload.upload.single('qnaImage'), questionsController.updateQna)
   .delete(auth, questionsController.deleteQna);
 
 /**

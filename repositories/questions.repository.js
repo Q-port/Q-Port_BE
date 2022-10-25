@@ -32,9 +32,9 @@ class QuestionsRepository {
   };
 
   // 질문글의 id를 받아와 제목, 내용, 수정시간을 저장
-  updateQna = async (questionId, title, content) => {
+  updateQna = async ({ questionId, title, content, imgUrl, updatedAt }) => {
     await this.Question.update(
-      { title, content, updatedAt: Date.now() },
+      { title, content, imgUrl, updatedAt },
       { where: { questionId } }
     );
   };
