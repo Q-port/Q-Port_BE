@@ -1,16 +1,20 @@
 const UserService = require('../services/user.service');
 
-
-
 class UserController {
     userService = new UserService(); 
   
-  //회원정보조회
-  getUser = async (req,res) => {
-    const {userId} = res.locals.user
-    const mypage = await this.userService.findOneUser(userId)
+  //내정보조회
+ getUser = async (req,res) => {
+ 
+  res.status(200).json({data:res.locals})
+ }
 
-    res.status(200).json({data:mypage})
+  //회원정보조회
+  getOther = async (req,res) => {
+    const {userId} = res.locals.user
+    const userpage = await this.userService.findOneUser(userId)
+
+    res.status(200).json({data:userpage})
   }
 
   //회원정보수정
