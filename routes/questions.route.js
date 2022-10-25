@@ -19,24 +19,29 @@ router
   .post(questionsController.createQna)
   .get(questionsController.getQna);
 
-  /**
-   * PUT : 질문글 이미지 업로드 API
-   */
+/**
+ * PUT : 질문글 이미지 업로드 API
+ */
 router
   .route('/:questionId/image')
   .put(upload.upload.single('qnaImage'), questionsController.updateImage);
 
-  /**
-   * GET : 질문글 상세 조회
-   * PUT : 질문글 제목, 내용 수정
-   * DELETE : 질문글 삭제
-   */
+/**
+ * GET : 질문글 상세 조회
+ * PUT : 질문글 제목, 내용 수정
+ * DELETE : 질문글 삭제
+ */
 router
   .route('/:questionId')
   .get(questionsController.findByQna)
   .put(questionsController.updateQna)
   .delete(questionsController.deleteQna);
 
+/**
+ * PUT : 질문자 채택
+ */
 router.route('/:questionId/:answerId').put(questionsController.selectQna);
+
+router.route('/users/:userId').get(questionsController.myQuestions);
 
 module.exports = router;

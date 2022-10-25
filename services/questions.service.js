@@ -6,12 +6,17 @@ class QuestionsService {
 
   // 작성될 질문글의 제목과 내용을 받아 repository로 전달
   createQna = async (req, res, next) => {
-    // const { userId } = res.locals.user;
-    const userId = 1;
+    // const { user } = res.locals;
+
     const { title, content } = req.body;
 
     const qna = {
-      userId,
+      // userId: userId,
+      // nickname: user.nickname,
+      // avatar: user.avatar,
+      userId: 1,
+      nickname: 'testUser',
+      avatar: 'defalt',
       title,
       content,
       imgUrl: 'defalt',
@@ -145,6 +150,11 @@ class QuestionsService {
         time: getTime,
         questionId,
       });
+  };
+
+  myQuestions = async (req, res, next) => {
+    const { userId } = req.params;
+    return await this.questionsRepository.myQuestions(userId);
   };
 }
 
