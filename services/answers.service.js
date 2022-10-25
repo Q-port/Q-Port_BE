@@ -51,9 +51,7 @@ class AnswersService {
   // 답변 불러오기
   getAnswer = async (req, res, next) => {
     const { questionId } = req.params;
-    const answer = await this.answersRepository.findByQuestionId({
-      questionId,
-    });
+    const answer = await this.answersRepository.findByQuestionId(questionId);
     if (!questionId || !answer) throw new Error('잘못된 요청 입니다.');
 
     return answer;
