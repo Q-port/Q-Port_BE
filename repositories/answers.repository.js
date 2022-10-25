@@ -29,6 +29,13 @@ class AnswersRepository {
     });
   };
 
+  // 내가 쓴 답변글 불러오기
+  findByUserId = async (userId) => {
+    return await this.Answer.findAll({
+      where: { userId },
+    });
+  };
+
   // 답변 중복확인
   findByDuplicate = async (questionId, userId) => {
     return await this.Answer.findOne({

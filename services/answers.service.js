@@ -7,16 +7,17 @@ class AnswersService {
 
   // 답변 작성
   createAnswer = async (req, res, next) => {
-    // const { userId } = res.locals.user;
-    const userId = 5;
+    const { user } = res.locals;
     const { questionId } = req.params;
-    const { title, content } = req.body;
+    const { content } = req.body;
     const answer = {
-      userId,
+      userId: user.userId,
+      nickname: user.nickname,
+      avatar: user.avatar,
       questionId,
-      title,
       content,
     };
+    // 본인 질문에 답변 작성 불가
 
     // 해결된 게시글에 답변 작성 불가
     const isDone = await this.questionsRepository.findByQna(questionId);
@@ -27,7 +28,7 @@ class AnswersService {
     // user별 답변 중복작성 불가
     const isDuplicate = await this.answersRepository.findByDuplicate(
       questionId,
-      userId
+      user.userId
     );
     if (isDuplicate) throw new Error('답변을 중복해서 작성할 수 없습니다.');
 
@@ -56,11 +57,11 @@ class AnswersService {
   updateAnswer = async (req, res, next) => {
     const { answerId } = req.params;
     const { title, content } = req.body;
-    // const { userId } = res.locals.user;
-    const userId = 1;
+    const { user } = res.locals;
     const answer = await this.answersRepository.findByAnswerId(answerId);
 
-    if (answer.userId !== userId) throw new Error('본인만 수정할 수 있습니다.');
+    if (answer.userId !== user.userId)
+      throw new Error('본인만 수정할 수 있습니다.');
     if (!answer) throw new Error('잘못된 요청입니다.');
 
     await this.answersRepository.updateAnswer(answerId, title, content);
@@ -68,12 +69,11 @@ class AnswersService {
 
   // 답변 삭제하기
   deleteAnswer = async (req, res, next) => {
-    // const { userId } = res.locals.user;
-    const userId = 1;
+    const { user } = res.locals;
     const { answerId } = req.params;
     const findByWriter = await this.answersRepository.findByAnswerId(answerId);
 
-    if (findByWriter.userId !== userId)
+    if (findByWriter.userId !== user.userId)
       throw new Error('본인만 삭제할 수 있습니다.');
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
 
@@ -94,6 +94,11 @@ class AnswersService {
     );
 
     return updateImageData;
+  };
+
+  findByUserId = async (req, res) => {
+    const { userId } = req.params;
+    return this.answersRepository.findByUserId(userId);
   };
 }
 
