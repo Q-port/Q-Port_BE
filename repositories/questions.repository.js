@@ -79,17 +79,17 @@ class QuestionsRepository {
     }
   };
 
-  qnaViewCheck = async (ip) => {
-    const result = await this.qnaView.findOne({ where: { ip } });
+  qnaViewCheck = async ({ ip, questionId }) => {
+    const result = await this.qnaView.findOne({ where: { ip, questionId } });
     return result;
   };
-  createView = async (ip, time, questionId) => {
-    await this.qnaView.create({ ip, time });
+  createView = async ({ questionId, ip, time }) => {
+    await this.qnaView.create({ questionId, ip, time });
     await this.Question.increment({ view: 1 }, { where: { questionId } });
   };
 
-  qnaViewCount = async ({ ipAdress, time, questionId }) => {
-    await this.qnaView.update({ time }, { where: { ip: ipAdress } });
+  qnaViewCount = async ({ ip, time, questionId }) => {
+    await this.qnaView.update({ time }, { where: { ip, questionId } });
     await this.Question.increment({ view: 1 }, { where: { questionId } });
   };
 }
