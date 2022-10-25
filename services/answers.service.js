@@ -27,12 +27,13 @@ class AnswersService {
     if (isDone.selectedAnswer > 0)
       throw new Error('해결완료 된 질문에 답변할 수 없습니다.');
 
-    // user별 답변 중복작성 불가
-    const isDuplicate = await this.answersRepository.findByDuplicate(
+    // 중복작성 불가
+    // 해당 질문에 이전에 답변한 유저 답변 불가
+    const isDuplicateUser = await this.answersRepository.findByDuplicate(
       questionId,
       user.userId
     );
-    if (isDuplicate) throw new Error('답변을 중복해서 작성할 수 없습니다.');
+    if (isDuplicateUser) throw new Error('답변을 중복해서 작성할 수 없습니다.');
 
     // 한 질문에 답변 10개 제한
     const answerCount = await this.answersRepository.answerCountByQuestionId(
@@ -88,20 +89,22 @@ class AnswersService {
   };
 
   // 이미지
-  updateImage = async (userId, answersId, imageFileName) => {
+  updateImage = async (req, res) => {
+    const { userId } = res.locals.user;
+    const { answerId } = req.params;
+    const imageFileName = req.file ? req.file.key : null;
+
     if (!imageFileName) throw new Error('게시물 이미지가 빈 값');
-    const findByWriter = await this.answersRepository.findByQna(answersId);
+    const findByWriter = await this.answersRepository.findByAnswerId(answerId);
 
     if (findByWriter.userId !== userId)
       throw new Error('본인만 수정할 수 있습니다.');
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
 
-    const updateImageData = await this.answersRepository.updateImage(
-      questionId,
+    await this.answersRepository.updateImage(
+      answerId,
       process.env.S3_STORAGE_URL + imageFileName
     );
-
-    return updateImageData;
   };
 
   // userId기준 답변 목록 불러오기

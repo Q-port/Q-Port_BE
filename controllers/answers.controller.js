@@ -52,7 +52,15 @@ class AnswersController {
   };
 
   // 이미지 업데이트
-  updateImage = async (req, res, next) => {};
+  updateImage = async (req, res, next) => {
+    try {
+      await this.answersService.updateImage(req, res);
+
+      res.status(200).send({ ok: true, message: '이미지가 등록되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   // 내가 작성한 답변글 목록 받기
   findByUserId = async (req, res, next) => {

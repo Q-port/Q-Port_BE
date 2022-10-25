@@ -75,7 +75,20 @@ class AnswersRepository {
   };
 
   // 이미지 업로드
-  updateImage = async (questionId, imgUrl) => {};
+  updateImage = async (answerId, imgUrl) => {
+    try {
+      await this.Answer.update(
+        {
+          imgUrl,
+        },
+        {
+          where: { answerId },
+        }
+      );
+    } catch (error) {
+      throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
+    }
+  };
 }
 
 module.exports = AnswersRepository;
