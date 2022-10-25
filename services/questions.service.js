@@ -128,16 +128,23 @@ class QuestionsService {
     const { questionId } = req.params;
     const ipAdress = req.ip.split(':').pop();
     const getTime = Date.now();
-    const existIp = await this.questionsRepository.qnaViewCheck(ipAdress);
+    const existIp = await this.questionsRepository.qnaViewCheck({
+      ip: ipAdress,
+      questionId,
+    });
 
     if (!existIp)
-      await this.questionsRepository.createView(ipAdress, getTime, questionId);
+      return await this.questionsRepository.createView({
+        questionId,
+        ip: ipAdress,
+        time: getTime,
+      });
     const intervalCount =
-      Date.now().toString().substring(7) - existIp.time.substring(7) > 30000;
+      getTime.toString().substring(7) - existIp.time.substring(7) > 30000;
     if (intervalCount)
       await this.questionsRepository.qnaViewCount({
-        ipAdress,
-        time: Date.now(),
+        ip: ipAdress,
+        time: getTime,
         questionId,
       });
   };
