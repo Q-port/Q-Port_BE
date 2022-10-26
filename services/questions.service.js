@@ -128,8 +128,8 @@ class QuestionsService {
     if (!findByAnswerUserId) throw new Error('잘못된 요청입니다.');
 
     // 질문글에 달린 답변글이 아닐경우 예외처리
-    if (findByAnswerUserId.questionsId !== questionId)
-      throw new Error('잘못된 요청입니다.');
+    // if (findByAnswerUserId.questionId !== questionId)
+    //   throw new Error('잘못된 요청입니다.');
 
     const answerUserId = findByAnswerUserId.userId;
 
