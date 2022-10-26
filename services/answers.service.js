@@ -15,7 +15,7 @@ class AnswersService {
     this.ValidationOfWritingAnswers(user, content, questionId);
 
     // 이미지 처리
-    const imgUrl = this.attachImage(req);
+    const imgUrl = await this.attachImage(req);
 
     // 게시할 답변 생성
     const answer = {
@@ -51,7 +51,7 @@ class AnswersService {
     const { user } = res.locals;
 
     // 이미지 처리
-    const imgUrl = this.attachImage(req);
+    const imgUrl = await this.attachImage(req);
 
     // 내용 유효성 검사
     if (!content.trim()) throw new Error('내용을 입력해주세요.');
@@ -92,34 +92,40 @@ class AnswersService {
     const { userId } = req.params;
     // 해당 유저가 작성한 답변글 가져오기 attributes: ['questionId', 'createdAt', 'answerId']
     const foundAnswers = await this.answersRepository.findByUserId(userId);
-
-    // 반환 예정인 answer 선언
-    let answers = new Object();
+    // 반환예정 data 선언
+    let data = [];
 
     // foundAnswers 내부를 순회하며 데이터 가공
     for (let i = 0; i < foundAnswers.length; i++) {
-      // attributes 처리된 데이터를 answers에 삽입
-      answers[i] = foundAnswers[i];
-
       // 유저가 작성한 답변의 질문 가져오기 attributes: ['questionId', 'title', 'selectedAnswer']
       let tempQuestion = await this.answersRepository.getQuestionByQuestionId(
         foundAnswers[i].questionId
       );
 
-      // 가져온 답변의 제목을 answers에 삽입
-      answers[i]['dataValues'].title = tempQuestion.title;
-
       // 질문의 진행상황 및 해당유저의 채택여부 식별하여 answers에 삽입
+      let status = '';
       if (tempQuestion.selectedAnswer === 0) {
-        answers[i]['dataValues'].status = '진행중';
+        status = '진행중';
       } else if (tempQuestion.selectedAnswer !== foundAnswers[i].answerId) {
-        answers[i]['dataValues'].status = '완료됨';
+        status = '완료됨';
       } else if (tempQuestion.selectedAnswer === foundAnswers[i].answerId) {
-        answers[i]['dataValues'].status = '채택됨';
+        status = '채택됨';
       }
+
+      // 처리된 데이터를 모은 Object 선언
+      const tempData = {
+        questionId: foundAnswers[i].questionId,
+        answerId: foundAnswers[i].answerId,
+        title: tempQuestion.title,
+        status,
+        createdAt: foundAnswers[i].createdAt,
+      };
+
+      // Data를 Array에 삽입
+      data.push(tempData);
     }
 
-    return answers;
+    return data;
   };
 
   // 이미지 처리
