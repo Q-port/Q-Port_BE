@@ -25,18 +25,15 @@ class UserController {
   };
 
   //회원정보수정
-  updateUser = async (req, res) => {
+  updateUser = async (req, res, next) => {
     try {
-      const { oldPassword, newPassword, confirm } = req.body;
-      if (oldPassword === newPassword || oldPassword === confirm) {
-        throw new Error('기존의 패스워드와 동일합니다');
-      }
       await this.userService.updateUser(req, res);
       res.status(200).send({ ok: true, message: '회원정보가 수정되었습니다' });
-    } catch (e) {
-      res
-        .status(400)
-        .send({ ok: false, message: '회원정보수정에 실패했습니다' });
+    } catch (error) {
+      // res
+      //   .status(400)
+      //   .send({ ok: false, message: '회원정보수정에 실패했습니다' });
+      next(error);
     }
   };
 
@@ -52,7 +49,6 @@ class UserController {
       }
       await this.userService.updateImg(userId, imageFileName);
 
-      await this.userService.updateImg(req, res);
       res.status(200).send({ ok: true, message: '이미지가 수정되었습니다' });
     } catch (error) {
       res
