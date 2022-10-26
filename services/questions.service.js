@@ -100,6 +100,9 @@ class QuestionsService {
     if (findByWriter.userId !== userId)
       throw new Error('본인만 채택할 수 있습니다.');
 
+    if (findByWriter.selectedAnswer !== 0)
+      throw new Error('채택은 한 번만 가능합니다.');
+
     const findByAnswerUserId = await this.questionsRepository.findByAnswerUser(
       answerId
     );
