@@ -29,7 +29,7 @@ class AnswersRepository {
     });
   };
 
-  // 내가 쓴 답변글 불러오기
+  // userId로 답변글 불러오기
   findByUserId = async (userId) => {
     return await this.Answer.findAll({
       where: { userId },
@@ -44,9 +44,9 @@ class AnswersRepository {
   };
 
   // 답변 수정
-  updateAnswer = async (answerId, title, content) => {
+  updateAnswer = async (answerId, content, imgUrl) => {
     await this.Answer.update(
-      { title, content, updatedAt: Date.now() },
+      { content, imgUrl, updatedAt: Date.now() },
       { where: { answerId } }
     );
   };
