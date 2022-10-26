@@ -10,7 +10,7 @@ class UserRepository {
   //  attributes: { exclude: ['password'] },
 
   // 회원정보수정
-    updateUser = async (userId, nickname,  password) => {
+    updateUser = async (userId, nickname, password) => {
   await User.update({nickname, password}, { where: {userId} });
   };
 
