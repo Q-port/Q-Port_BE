@@ -50,8 +50,7 @@ class UserController {
       } else {
         null;
       }
-
-      await this.userService.updateImg(userId,imageFileName)
+      await this.userService.updateImg(userId, imageFileName);
 
       await this.userService.updateImg(req, res);
       res.status(200).send({ ok: true, message: '이미지가 수정되었습니다' });
@@ -61,6 +60,18 @@ class UserController {
         .send({ ok: false, message: error.message });
     }
   };
+
+  //명예의전당
+  getRanks = async (req, res) => {
+    try {
+      const ranks = await this.userService.getRanks()
+      res.status(200).json({ data: ranks });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  }
 }
 
 module.exports = UserController;
