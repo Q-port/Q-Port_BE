@@ -62,20 +62,25 @@ class QuestionsRepository {
     );
   };
 
+  // 해당 아이피가 조회수를 올렸는지 확인
   qnaViewCheck = async ({ ip, questionId }) => {
     const result = await this.qnaView.findOne({ where: { ip, questionId } });
     return result;
   };
+
+  // 게시글의 조회수를 올리고 아이피와 게시글ID, 시간을 DB에 저장
   createView = async ({ questionId, ip, time }) => {
     await this.qnaView.create({ questionId, ip, time });
     await this.Question.increment({ view: 1 }, { where: { questionId } });
   };
 
+  // 게시글의 조회수를 올리고 시간을 DB에 업데이트
   qnaViewCount = async ({ ip, time, questionId }) => {
     await this.qnaView.update({ time }, { where: { ip, questionId } });
     await this.Question.increment({ view: 1 }, { where: { questionId } });
   };
 
+  // 내가 쓴 질문글을 내림차순으로 내용과 이미지주소 제외해서 리턴.
   myQuestions = async (userId) => {
     return await this.Question.findAll({
       where: { userId },
@@ -86,6 +91,7 @@ class QuestionsRepository {
     });
   };
 
+  // 채택기능을 위해 답변글ID로 답변글을 리턴.
   findByAnswerUser = async (answerId) => {
     return await this.Answer.findByPk(answerId);
   };

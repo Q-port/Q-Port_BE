@@ -11,19 +11,6 @@ class S3ImageController {
       acl: 'public-read', //접근 권한
       contentType: multerS3.AUTO_CONTENT_TYPE,
       shouldTransform: true,
-      // transforms: [
-      //   {
-      //     id: 'resized',
-      //     key: function (req, file, cb) {
-      //       let extension = path.extname(file.originalname);
-      //       cb(null, Date.now().toString() + extension);
-      //     },
-      //     transform: function (req, file, cb) {
-      //       cb(null, sharp().resize(100, 100)); // 이미지를 100x100 으로 리사이징
-      //     },
-      //   },
-      // ],
-      // acl: 'public-read-write',
       key: function (req, file, cb) {
         console.log(file);
         let ext = file.mimetype.split('/')[1]; // 확장자
