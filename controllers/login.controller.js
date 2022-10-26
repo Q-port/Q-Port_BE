@@ -2,7 +2,6 @@ require('dotenv').config();
 const LoginService = require('../services/login.service');
 const joi = require('../util/joi')
 
-
 class LoginController {
   loginService = new LoginService();
   login = async (req, res) => {
