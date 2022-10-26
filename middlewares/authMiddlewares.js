@@ -9,6 +9,7 @@ module.exports = async (req, res, next) => {
 
     if (!cookies) {
       return res.status(403).send({
+        ok: false,
         errorMessage: '로그인이 필요한 기능입니다.',
       });
     }
@@ -16,6 +17,7 @@ module.exports = async (req, res, next) => {
     const [tokenType, tokenValue] = cookies.split(' ');
     if (tokenType !== 'Bearer') {
       return res.status(403).send({
+        ok: false,
         errorMessage: '전달된 쿠키에서 오류가 발생하였습니다.',
       });
     }
@@ -29,7 +31,8 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     console.trace(error);
     return res.status(403).send({
-      errorMessage: '로그인이 필요한 기능입니다.',
+        ok: false,
+        errorMessage: '로그인이 필요한 기능입니다.',
     });
   }
 };
