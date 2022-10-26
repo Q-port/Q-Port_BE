@@ -77,6 +77,7 @@ class QuestionsController {
 
       res.status(200).send({ ok: true, message: '채택되었습니다.' });
     } catch (error) {
+      console.log(error)
       res
         .status(error.status || 400)
         .send({ ok: false, message: error.message });

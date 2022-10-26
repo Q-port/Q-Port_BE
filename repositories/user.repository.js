@@ -7,11 +7,6 @@ class UserRepository {
   };
   //  attributes: { exclude: ['password'] },
 
-  // 회원정보수정
-  updateUser = async (userId, nickname, password) => {
-    await User.update({ nickname, password }, { where: { userId } });
-  };
-
   //프로필사진업로드
   updateImg = async (userId, avatar) => {
     await User.update({ avatar }, { where: { userId } });
@@ -28,7 +23,7 @@ class UserRepository {
   //   })
   // }
 
-  getAllUsers = async () => {
+  getRanks = async () => {
     return await User.findAll({
       limit: 5,
       attributes: {
@@ -36,6 +31,23 @@ class UserRepository {
       },
       order: [['selectedAnswer', 'desc']],
     });
+  };
+
+  updateNickname = async (userId, nickname) => {
+    await User.update({ nickname }, { where: { userId } });
+  };
+
+  updatePassword = async (userId, password) => {
+    await User.update({ password }, { where: { userId } });
+  };
+
+  // 회원정보수정
+  updateUser = async (userId, nickname, password) => {
+    await User.update({ nickname, password }, { where: { userId } });
+  };
+
+  findByNickname = async (nickname) => {
+    return await User.findOne({ where: { nickname } });
   };
 }
 

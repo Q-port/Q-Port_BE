@@ -1,4 +1,3 @@
-const { sign } = require('jsonwebtoken');
 const SignupService = require('../services/signup.service');
 
 class SignupController {

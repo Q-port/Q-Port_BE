@@ -12,7 +12,7 @@ class AnswersService {
     const { content } = req.body;
 
     // 데이터 유효성 검사
-    this.ValidationOfWritingAnswers(user, content, questionId);
+   await this.ValidationOfWritingAnswers(user, content, questionId);
 
     // 이미지 처리
     const imgUrl = await this.attachImage(req);
@@ -147,14 +147,12 @@ class AnswersService {
     // 본인 질문에 답변 작성 불가
     const isMyQuestion = await this.questionsRepository.findByQna(questionId);
     if (isMyQuestion.userId === user.userId) {
-      res.status(403);
       throw new Error('본인의 질문에 답변할 수 없습니다.');
     }
 
     // 해결된 게시글에 답변 작성 불가
     const isDone = await this.questionsRepository.findByQna(questionId);
     if (isDone.selectedAnswer > 0) {
-      res.status(403);
       throw new Error('해결완료 된 질문에 답변할 수 없습니다.');
     }
 
@@ -164,7 +162,6 @@ class AnswersService {
       user.userId
     );
     if (isDuplicateUser) {
-      res.status(403);
       throw new Error('답변을 중복해서 작성할 수 없습니다.');
     }
 
@@ -173,7 +170,6 @@ class AnswersService {
       questionId
     );
     if (answerCount === 10) {
-      res.status(403);
       throw new Error('한 질문에 대한 답변은 10개를 넘을 수 없습니다.');
     }
   };
