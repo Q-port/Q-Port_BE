@@ -10,13 +10,25 @@ class AnswersService {
     const { user } = res.locals;
     const { questionId } = req.params;
     const { content } = req.body;
+    const imageFileName = req.file ? req.file.key : null;
+
+    const imgUrl = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : null;
+
     const answer = {
+      questionId: questionId,
       userId: user.userId,
       nickname: user.nickname,
       avatar: user.avatar,
-      questionId,
       content,
+      imgUrl,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
+
+    if (!content.trim()) throw new Error('내용을 입력해주세요.');
+
     // 본인 질문에 답변 작성 불가
     const isMyQuestion = await this.questionsRepository.findByQna(questionId);
     if (isMyQuestion.userId === user.userId)
@@ -42,6 +54,7 @@ class AnswersService {
     if (answerCount === 10)
       throw new Error('한 질문에 대한 답변은 10개를 넘을 수 없습니다.');
 
+    // 가공된 질문글 데이터를 repository로 전달
     await this.answersRepository.createAnswer(answer);
     await this.answersRepository.addAnswerCount({ questionId });
 
@@ -60,15 +73,27 @@ class AnswersService {
   // 답변 수정하기
   updateAnswer = async (req, res, next) => {
     const { answerId } = req.params;
-    const { title, content } = req.body;
+    const { content } = req.body;
     const { user } = res.locals;
-    const answer = await this.answersRepository.findByAnswerId(answerId);
 
+    const imageFileName = req.file ? req.file.key : undefined;
+
+    const imgUrl = imageFileName
+      ? process.env.S3_STORAGE_URL + imageFileName
+      : undefined;
+
+    // 내용 유효성 검사
+    if (!content.trim()) throw new Error('내용을 입력해주세요.');
+
+    // 본인의 게시글인지 확인
+    const answer = await this.answersRepository.findByAnswerId(answerId);
     if (answer.userId !== user.userId)
       throw new Error('본인만 수정할 수 있습니다.');
     if (!answer) throw new Error('잘못된 요청입니다.');
 
-    await this.answersRepository.updateAnswer(answerId, title, content);
+    await this.answersRepository.updateAnswer(answerId, content, imgUrl);
+
+    res.status(200);
   };
 
   // 답변 삭제하기
@@ -106,9 +131,19 @@ class AnswersService {
   };
 
   // userId기준 답변 목록 불러오기
-  findByUserId = async (req, res) => {
+  getAnswersByUserId = async (req, res) => {
     const { userId } = req.params;
-    return this.answersRepository.findByUserId(userId);
+    const answers = this.answersRepository.findByUserId(userId);
+
+    for (const first in answers) {
+      for (const key in first) {
+        if (user.hasOwnProperty(key)) {
+          console.log(`${key}: ${user[key]}`);
+        }
+      }
+    }
+
+    return answers;
   };
 }
 
