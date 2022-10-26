@@ -1,11 +1,10 @@
 const QuestionsService = require('../services/questions.service');
-const joi = require('../util/joi');
 
 class QuestionsController {
   questionsService = new QuestionsService();
 
   // 작성여부에 따른 status를 클라이언트로 전달
-  createQna = async (req, res, next) => {
+  createQna = async (req, res) => {
     try {
       await this.questionsService.createQna(req, res);
 
@@ -18,7 +17,7 @@ class QuestionsController {
   };
 
   // return된 질문글 목록을 전달
-  getQna = async (req, res, next) => {
+  getQna = async (req, res) => {
     try {
       const qna = await this.questionsService.getQna();
       res.status(200).json({ data: qna });
@@ -30,9 +29,11 @@ class QuestionsController {
   };
 
   // return된 질문글 상세조회 데이터를 전달
-  findByQna = async (req, res, next) => {
+  findByQna = async (req, res) => {
     try {
+      // 조회수 기능을 위해 request 전달
       await this.questionsService.qnaViewCheck(req);
+
       const detail = await this.questionsService.findByQna(req, res);
 
       res.status(200).json({ data: detail });
@@ -44,10 +45,8 @@ class QuestionsController {
   };
 
   // 수정 성공 여부에 따른 status를 전달
-  updateQna = async (req, res, next) => {
+  updateQna = async (req, res) => {
     try {
-      // body로 받아오는 title, content 검증
-
       await this.questionsService.updateQna(req, res);
 
       res.status(200).send({ ok: true, message: '게시글이 수정되었습니다.' });
@@ -59,7 +58,7 @@ class QuestionsController {
   };
 
   // 삭제 성공 여부에 따른 status를 전달
-  deleteQna = async (req, res, next) => {
+  deleteQna = async (req, res) => {
     try {
       await this.questionsService.deleteQna(req, res);
 
@@ -72,20 +71,24 @@ class QuestionsController {
   };
 
   // 채택 성공 여부에 따른 status를 전달
-  selectQna = async (req, res, next) => {
+  selectQna = async (req, res) => {
     try {
       await this.questionsService.selectQna(req, res);
+
       res.status(200).send({ ok: true, message: '채택되었습니다.' });
     } catch (error) {
+      console.log(error)
       res
         .status(error.status || 400)
         .send({ ok: false, message: error.message });
     }
   };
 
-  myQuestions = async (req, res, next) => {
+  // 내가 작성한 질문글 목록
+  myQuestions = async (req, res) => {
     try {
       const myQuestions = await this.questionsService.myQuestions(req, res);
+
       res.status(200).json({ data: myQuestions });
     } catch (error) {
       res
@@ -94,9 +97,11 @@ class QuestionsController {
     }
   };
 
-  qnaSearch = async (req, res, next) => {
+  // 질문글들의 제목을 검색
+  qnaSearch = async (req, res) => {
     try {
       const qnaSearch = await this.questionsService.qnaSearch(req, res);
+
       res.status(200).json({ data: qnaSearch });
     } catch (error) {
       res

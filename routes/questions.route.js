@@ -20,6 +20,9 @@ router
   .post(auth, upload.upload.single('qnaImage'), questionsController.createQna)
   .get(questionsController.getQna);
 
+/**
+ * GET : 질문글 검색
+ */
 router.route('/search').get(questionsController.qnaSearch);
 
 /**
@@ -38,6 +41,9 @@ router
  */
 router.route('/:questionId/:answerId').put(auth, questionsController.selectQna);
 
+/**
+ * GET : 내가 작성한 질문글 보기
+ */
 router.route('/users/:userId').get(questionsController.myQuestions);
 
 module.exports = router;
