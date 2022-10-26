@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
 
     if (cookies) {
       return res.status(403).send({
+        ok: false,
         errorMessage: '이미 로그인이 되어있습니다.',
       });
     }
@@ -15,7 +16,8 @@ module.exports = (req, res, next) => {
   } catch (error) {
     console.trace(error);
     return res.status(400).send({
-      errorMessage: '잘못된 접근입니다.',
+        ok: false,
+        errorMessage: '잘못된 접근입니다.',
     });
   }
 };
