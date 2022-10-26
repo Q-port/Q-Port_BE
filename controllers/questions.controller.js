@@ -117,6 +117,17 @@ class QuestionsController {
         .send({ ok: false, message: error.message });
     }
   };
+
+  qnaSearch = async (req, res, next) => {
+    try {
+      const qnaSearch = await this.questionsService.qnaSearch(req, res);
+      res.status(200).json({ data: qnaSearch });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
 }
 
 module.exports = QuestionsController;
