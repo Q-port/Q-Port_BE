@@ -19,7 +19,7 @@ class UserService {
       } 
 
   //회원정보수정
-  updateUser = async (req,res) => {
+  updateUser = async (req,res) => { // db 비밀번호 입력값과 맞는지
       const {nickname, newPassword} = req.body
       const {userId} =res.locals.user
       await this.userRepository.updateUser(userId, nickname, newPassword);

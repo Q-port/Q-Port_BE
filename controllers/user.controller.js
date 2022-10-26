@@ -28,7 +28,10 @@ class UserController {
   updateUser = async (req, res) => {
     try {
       const { oldPassword, newPassword, confirm } = req.body;
-      if (oldPassword === newPassword || oldPassword === confirm) {
+      if (
+        oldPassword &&
+        (oldPassword === newPassword || oldPassword === confirm)
+      ) {
         throw new Error('기존의 패스워드와 동일합니다');
       }
       await this.userService.updateUser(req, res);
@@ -51,7 +54,7 @@ class UserController {
         null;
       }
 
-      await this.userService.updateImg(userId,imageFileName)
+      await this.userService.updateImg(userId, imageFileName);
 
       await this.userService.updateImg(req, res);
       res.status(200).send({ ok: true, message: '이미지가 수정되었습니다' });

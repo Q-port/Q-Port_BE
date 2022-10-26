@@ -135,7 +135,7 @@ class AnswersService {
     // 이미지 Url 생성
     const imgUrl = imageFileName
       ? process.env.S3_STORAGE_URL + imageFileName
-      : null;
+      : undefined;
 
     return imgUrl;
   };
