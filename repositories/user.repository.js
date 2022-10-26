@@ -15,9 +15,8 @@ class UserRepository {
   };
 
   //프로필사진업로드
-  updateImg = async (avatar) => {
-    const updateImg = User.update({avatar}, {where: {avatar}});
-    return updateImg
+  updateImg = async (userId,avatar) => {
+   await User.update({avatar}, {where: {userId}});
   }
 }
 
