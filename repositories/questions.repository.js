@@ -95,17 +95,13 @@ class QuestionsRepository {
   };
 
   myQuestions = async (userId) => {
-    return await this.Question.findAll(
-      {
-        attributes: {
-          exclude: ['content', 'imgUrl'],
-        },
-        order: [['createdAt', 'desc']],
+    return await this.Question.findAll({
+      where: { userId },
+      attributes: {
+        exclude: ['content', 'imgUrl'],
       },
-      {
-        where: { userId },
-      }
-    );
+      order: [['createdAt', 'desc']],
+    });
   };
 
   findByAnswerUser = async (answerId) => {

@@ -100,9 +100,15 @@ class QuestionsService {
     if (findByWriter.userId !== userId)
       throw new Error('본인만 채택할 수 있습니다.');
 
+    if (findByWriter.selectedAnswer !== 0)
+      throw new Error('채택은 한 번만 가능합니다.');
+
     const findByAnswerUserId = await this.questionsRepository.findByAnswerUser(
       answerId
     );
+    if (!findByAnswerUserId) throw new Error('잘못된 요청입니다.');
+    if (findByAnswerUserId.questionsId !== questionId)
+      throw new Error('잘못된 요청입니다.');
     const answerUserId = findByAnswerUserId.userId;
 
     // 답변글 게시자의 userId와 질문글 id, 답변글 id를 전달
@@ -163,6 +169,15 @@ class QuestionsService {
   myQuestions = async (req, res, next) => {
     const { userId } = req.params;
     return await this.questionsRepository.myQuestions(userId);
+  };
+
+  qnaSearch = async (req, res, next) => {
+    const { content } = req.query;
+    if (!content) throw new Error('내용을 입력해주세요.');
+
+    const qnas = await this.questionsRepository.getQna();
+
+    return qnas.filter((q) => q.title.includes(content));
   };
 }
 
