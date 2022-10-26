@@ -2,26 +2,23 @@ const { User } = require('../models');
 
 class UserRepository {
 
-  // //내정보조회
-  // findOneUser = async (userId) =>{
-  //   const mypage = await User.findByPk(userId)
-
-  //   return mypage;
-  // }
-
-
   //회원정보조회
-findOneUser = async (userId) =>{
+  findOneUser = async (userId) =>{
 
-    return await User.findByPk(userId)
-  }
+  return await User.findByPk(userId)
+  } 
+  //  attributes: { exclude: ['password'] },
 
-    // 회원정보수정
-  updatePost = async (userId, email, nickname, password) => {
-    const updateUser = Posts.update({ email, nickname }, { where: {userId, password} });
-    return updateUser;
+  // 회원정보수정
+    updateUser = async (userId, nickname,  password) => {
+  await User.update({nickname, password}, { where: {userId} });
   };
 
+  //프로필사진업로드
+  updateImg = async (avatar) => {
+    const updateImg = User.update({avatar}, {where: {avatar}});
+    return updateImg
+  }
 }
 
 

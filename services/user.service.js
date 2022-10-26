@@ -2,27 +2,6 @@ const UserRepository = require('../repositories/user.repository');
 
 class UserService {
   userRepository = new UserRepository();
-  //내정보조회
-  //   findUser = async (userId) => { 
-  //   try {
-  //     const mypage = await this.UserRepository.findOneUser(userId);
-  //     return {
-  //       userId: mypage.userId,
-  //       email: mypage.email,
-  //       nickname: mypage.nickname,
-  //       avatar: mypage.avatar,
-  //       selectedAnswer: mypage.selectedAnswer,
-  //       password: mypage.password,
-  //       createdAt: mypage.createdAt,
-  //       updatedAt: mypage.updatedAt
-  //     }     
-  //   } catch (error) {
-  //     return {            
-  //       message: '내정보 조회에 실패했습니다',
-  //       status: 400,
-  //       }
-  //   }
-  // }
 
   //회원정보조회
   findOneUser = async (userId) => { 
@@ -37,27 +16,26 @@ class UserService {
           updatedAt: userpage.updatedAt
         }
       } 
-  
-
 
   //회원정보수정
-  updateUser = async (userId, email, nickname, password) => {
+  updateUser = async (req,res) => {
+      const {nickname, newPassword} = req.body
+      const {userId} =res.locals.user
+      await this.userRepository.updateUser(userId, nickname, newPassword);
+  };
 
+  //프로필사진업로드
+  updateImg = async (avatar) => {
     try {
-      await this.userRepository.updateUser(userId, email, nickname, password);
+      await this.userRepository.updateImg(avatar);
+    } catch (error) {
       return {
-        userId: updateUser.userId,
-        email: updateUser.email,
-        nickname: updateUser.nickname,
-        password: updateUser.password,
-      };
-    } catch (e) {
-      return {
-        message: '회원 정보가 수정되지 않았습니다.',
+        ok: false,
+        message: '이미지가 수정되지 않았습니다.',
         status: 400,
       };
     }
-  };
+  }
 };
 
 module.exports = UserService;
