@@ -6,6 +6,7 @@ class QuestionsController {
   // 작성여부에 따른 status를 클라이언트로 전달
   createQna = async (req, res) => {
     try {
+    console.log(req)
       await this.questionsService.createQna(req, res);
 
       res.status(200).send({ ok: true, message: '질문 작성 완료' });
