@@ -7,8 +7,6 @@ class AnswersController {
   // 답변 작성
   createAnswer = async (req, res, next) => {
     try {
-      await joi.AnswerWriteSchema.validateAsync(req.body);
-
       await this.answersService.createAnswer(req, res);
 
       res.status(200).send({ ok: true, message: '답변 작성 완료' });
@@ -30,8 +28,6 @@ class AnswersController {
   // 답변 수정
   updateAnswer = async (req, res, next) => {
     try {
-      await joi.AnswerWriteSchema.validateAsync(req.body);
-
       await this.answersService.updateAnswer(req, res);
 
       res.status(200).send({ ok: true, message: '답변이 수정되었습니다.' });
@@ -62,10 +58,10 @@ class AnswersController {
     }
   };
 
-  // 내가 작성한 답변글 목록 받기
-  findByUserId = async (req, res, next) => {
+  // 지정한 유저가 작성한 답변글 목록 받기
+  getAnswersByUserId = async (req, res, next) => {
     try {
-      const answers = await this.answersService.findByUserId(req, res);
+      const answers = await this.answersService.getAnswersByUserId(req, res);
 
       res.status(200).send({ data: answers });
     } catch (error) {

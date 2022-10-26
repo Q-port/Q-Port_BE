@@ -38,9 +38,4 @@ module.exports = {
     title: Joi.string().required().error(new Error('제목을 입력해주세요.')),
     content: Joi.string().required().error(new Error('내용을 입력해주세요.')),
   }),
-
-  // 답변 작성 유효성 검사
-  AnswerWriteSchema: Joi.object({
-    content: Joi.string().required().error(new Error('내용을 입력해주세요.')),
-  }),
 };
