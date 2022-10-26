@@ -1,14 +1,11 @@
 const { Question, Answer, User } = require('../models');
 
 class AnswersRepository {
-  constructor() {
-    this.Answer = Answer;
-    this.User = User;
-  }
+  constructor() {}
 
   // 답변 작성
   createAnswer = async (answer) => {
-    await this.Answer.create({
+    await Answer.create({
       ...answer,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -17,35 +14,36 @@ class AnswersRepository {
 
   // QuestionId로 답변 모두 불러오기
   findByQuestionId = async (questionId) => {
-    return await this.Answer.findAll({
+    return await Answer.findAll({
       where: { questionId },
     });
   };
 
   // AnswerId로 답변 불러오기
   findByAnswerId = async (answerId) => {
-    return await this.Answer.findOne({
+    return await Answer.findOne({
       where: { answerId },
     });
   };
 
   // userId로 답변글 불러오기
   findByUserId = async (userId) => {
-    return await this.Answer.findAll({
+    return await Answer.findAll({
+      attributes: ['questionId', 'createdAt', 'answerId'],
       where: { userId },
     });
   };
 
   // 답변 중복확인
   findByDuplicate = async (questionId, userId) => {
-    return await this.Answer.findOne({
+    return await Answer.findOne({
       where: { questionId, userId },
     });
   };
 
   // 답변 수정
   updateAnswer = async (answerId, content, imgUrl) => {
-    await this.Answer.update(
+    await Answer.update(
       { content, imgUrl, updatedAt: Date.now() },
       { where: { answerId } }
     );
@@ -53,7 +51,7 @@ class AnswersRepository {
 
   // 답변 삭제
   deleteAnswer = async (answerId) => {
-    await this.Answer.destroy({
+    await Answer.destroy({
       where: {
         answerId,
       },
@@ -71,23 +69,17 @@ class AnswersRepository {
 
   // questionId에 따른 답변 갯수 카운트
   answerCountByQuestionId = async (questionId) => {
-    return await Answer.count({ where: { questionId: questionId } });
+    return await Answer.count({
+      where: { questionId: questionId },
+    });
   };
 
-  // 이미지 업로드
-  updateImage = async (answerId, imgUrl) => {
-    try {
-      await this.Answer.update(
-        {
-          imgUrl,
-        },
-        {
-          where: { answerId },
-        }
-      );
-    } catch (error) {
-      throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
-    }
+  // 질문 글 상태 확인용 question 불러오기
+  getQuestionByQuestionId = async (questionId) => {
+    return await Question.findOne({
+      attributes: ['questionId', 'title', 'selectedAnswer'],
+      where: { questionId },
+    });
   };
 }
 
