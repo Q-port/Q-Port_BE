@@ -1,8 +1,9 @@
-const { Question, User, qnaView } = require('../models');
+const { Question, Answer, User, qnaView } = require('../models');
 
 class QuestionsRepository {
   constructor() {
     this.Question = Question;
+    this.Answer = Answer;
     this.User = User;
     this.qnaView = qnaView;
   }
@@ -16,7 +17,7 @@ class QuestionsRepository {
   getQna = async () => {
     return await this.Question.findAll({
       attributes: {
-        exclude: ['content'],
+        exclude: ['content', 'imgUrl'],
       },
       order: [['createdAt', 'desc']],
     });
@@ -32,9 +33,9 @@ class QuestionsRepository {
   };
 
   // 질문글의 id를 받아와 제목, 내용, 수정시간을 저장
-  updateQna = async (questionId, title, content) => {
+  updateQna = async ({ questionId, title, content, imgUrl, updatedAt }) => {
     await this.Question.update(
-      { title, content, updatedAt: Date.now() },
+      { title, content, imgUrl, updatedAt },
       { where: { questionId } }
     );
   };
@@ -50,33 +51,15 @@ class QuestionsRepository {
 
   // 질문글의 id를 받아와 질문글의 채택란에 답변글의 id를 저장
   // 답변글의 id를 받아와 답변글 게시자의 userId를 찾아 채택횟수를 증가
-  selectQna = async (/**answerUserId,  */ questionId, answerId) => {
+  selectQna = async (answerUserId, questionId, answerId) => {
     await this.Question.update(
       { selectedAnswer: answerId },
       { where: { questionId } }
     );
-    // await this.User.increment(
-    //   { score: 1 },
-    //   { where: { userId: answerUserId } }
-    // );
-  };
-
-  // 질문글의 id를 받아와 s3이미지주소를 저장
-  updateImage = async (questionId, imgUrl) => {
-    try {
-      await this.Question.update(
-        {
-          imgUrl,
-        },
-        {
-          where: { questionId },
-        }
-      );
-
-      return await this.findByQna(questionId);
-    } catch (error) {
-      throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
-    }
+    await this.User.increment(
+      { selectedAnswer: 1 },
+      { where: { userId: answerUserId } }
+    );
   };
 
   qnaViewCheck = async ({ ip, questionId }) => {
@@ -91,6 +74,20 @@ class QuestionsRepository {
   qnaViewCount = async ({ ip, time, questionId }) => {
     await this.qnaView.update({ time }, { where: { ip, questionId } });
     await this.Question.increment({ view: 1 }, { where: { questionId } });
+  };
+
+  myQuestions = async (userId) => {
+    return await this.Question.findAll({
+      where: { userId },
+      attributes: {
+        exclude: ['content', 'imgUrl'],
+      },
+      order: [['createdAt', 'desc']],
+    });
+  };
+
+  findByAnswerUser = async (answerId) => {
+    return await this.Answer.findByPk(answerId);
   };
 }
 

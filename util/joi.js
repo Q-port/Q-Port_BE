@@ -33,9 +33,5 @@ module.exports = {
       .min(4)
       .required()
       .error(new Error('이메일 또는 패스워드를 확인해주세요.')),
-  }),
-  questionSchema: Joi.object({
-    title: Joi.string().required().error(new Error('제목을 입력해주세요.')),
-    content: Joi.string().required().error(new Error('내용을 입력해주세요.')),
-  }),
+  })
 };

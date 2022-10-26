@@ -1,6 +1,6 @@
 require('dotenv').config();
 const LoginService = require('../services/login.service');
-const joi = require('../util/joi')
+const joi = require('../util/joi');
 
 class LoginController {
   loginService = new LoginService();
@@ -20,9 +20,9 @@ class LoginController {
       const expires = new Date();
       expires.setMinutes(expires.getMinutes() + 60);
       res.cookie(process.env.COOKIE_NAME, `Bearer ${loginResult}`, {
-      expires: expires,
+        expires: expires,
       });
-      res.send({ok: true, message: '로그인되었습니다'})
+      res.send({ token: `Bearer ${loginResult}` });
     } catch (error) {
       console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
       res.status(400).send({
