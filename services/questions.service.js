@@ -9,6 +9,10 @@ class QuestionsService {
     const { user } = res.locals;
 
     const { title, content } = req.body;
+
+    // body로 받아오는 title, content 검증
+    if (!title.trim() || !content.trim())
+      throw new Error('내용을 입력해주세요');
     const imageFileName = req.file ? req.file.key : null;
 
     const imgUrl = imageFileName
@@ -60,7 +64,7 @@ class QuestionsService {
     const imageFileName = req.file ? req.file.key : null;
     const imgUrl = imageFileName
       ? process.env.S3_STORAGE_URL + imageFileName
-      : null;
+      : undefined;
 
     await this.questionsRepository.updateQna({
       questionId,
@@ -119,26 +123,6 @@ class QuestionsService {
     );
   };
 
-  // 질문글의 id와 로그인된 유저의 id, 이미지 파일 이름을 repository로 전달
-  updateImage = async (userId, questionId, imageFileName) => {
-    if (!imageFileName) throw new Error('이미지를 업로드 해주세요.');
-
-    // 질문글게시자와 로그인된 유저가 같은지 검증
-    const findByWriter = await this.questionsRepository.findByQna(questionId);
-    if (findByWriter.userId !== userId)
-      throw new Error('본인만 수정할 수 있습니다.');
-
-    // 요청한 질문글이 존재하지 않을 때 예외처리
-    if (!findByWriter) throw new Error('잘못된 요청입니다.');
-
-    // 질문글의 id와 s3이미지 주소를 repository로 전달
-    const updateImageData = await this.questionsRepository.updateImage(
-      questionId,
-      process.env.S3_STORAGE_URL + imageFileName
-    );
-
-    return updateImageData;
-  };
   // 게시물이 조회될때 마다 확인해서 30000ms (5초)
   // 이상이거나 테이블 안에 아이피가 없으면 view++
   qnaViewCheck = async (req) => {

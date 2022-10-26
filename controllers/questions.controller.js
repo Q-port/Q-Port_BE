@@ -7,9 +7,6 @@ class QuestionsController {
   // 작성여부에 따른 status를 클라이언트로 전달
   createQna = async (req, res, next) => {
     try {
-      // body로 받아오는 title, content 검증
-      await joi.questionSchema.validateAsync(req.body);
-
       await this.questionsService.createQna(req, res);
 
       res.status(200).send({ ok: true, message: '질문 작성 완료' });
@@ -79,27 +76,6 @@ class QuestionsController {
     try {
       await this.questionsService.selectQna(req, res);
       res.status(200).send({ ok: true, message: '채택되었습니다.' });
-    } catch (error) {
-      res
-        .status(error.status || 400)
-        .send({ ok: false, message: error.message });
-    }
-  };
-
-  // 이미지 업로드 결과에 따라 status를 전달
-  updateImage = async (req, res, next) => {
-    try {
-      const { questionId } = req.params;
-      const { userId } = res.locals.user;
-
-      // 미들웨어를 통해 받은 file이 존재하지 않으면 null로 전달
-      const imageFileName = req.file ? req.file.key : null;
-      const imageData = await this.questionsService.updateImage(
-        userId,
-        questionId,
-        imageFileName
-      );
-      res.status(200).json({ data: imageData });
     } catch (error) {
       res
         .status(error.status || 400)

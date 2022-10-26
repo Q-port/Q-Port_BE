@@ -62,24 +62,6 @@ class QuestionsRepository {
     );
   };
 
-  // 질문글의 id를 받아와 s3이미지주소를 저장
-  updateImage = async (questionId, imgUrl) => {
-    try {
-      await this.Question.update(
-        {
-          imgUrl,
-        },
-        {
-          where: { questionId },
-        }
-      );
-
-      return await this.findByQna(questionId);
-    } catch (error) {
-      throw new Error(`UnhandleMysqlSequelizeError: ${error}`);
-    }
-  };
-
   qnaViewCheck = async ({ ip, questionId }) => {
     const result = await this.qnaView.findOne({ where: { ip, questionId } });
     return result;
