@@ -1,4 +1,5 @@
 const UserRepository = require('../repositories/user.repository');
+require('dotenv').config();
 
 class UserService {
   userRepository = new UserRepository();
@@ -25,16 +26,13 @@ class UserService {
   };
 
   //프로필사진업로드
-  updateImg = async (avatar) => {
-    try {
-      await this.userRepository.updateImg(avatar);
-    } catch (error) {
-      return {
-        ok: false,
-        message: '이미지가 수정되지 않았습니다.',
-        status: 400,
-      };
-    }
+  updateImg = async (userId,imageFileName) => {
+    if (!imageFileName) throw new Error('이미지를 업로드 해주세요.');
+
+    const avatar = process.env.S3_STORAGE_URL + imageFileName
+
+
+    await this.userRepository.updateImg(userId,avatar);
   }
 };
 
