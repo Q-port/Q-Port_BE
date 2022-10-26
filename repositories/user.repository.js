@@ -10,14 +10,13 @@ class UserRepository {
   //  attributes: { exclude: ['password'] },
 
   // 회원정보수정
-    updateUser = async (userId, nickname,  password) => {
+    updateUser = async (userId, nickname, password) => {
   await User.update({nickname, password}, { where: {userId} });
   };
 
   //프로필사진업로드
-  updateImg = async (avatar) => {
-    const updateImg = User.update({avatar}, {where: {avatar}});
-    return updateImg
+  updateImg = async (userId,avatar) => {
+   await User.update({avatar}, {where: {userId}});
   }
 }
 
