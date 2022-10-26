@@ -16,6 +16,27 @@ class UserRepository {
   updateImg = async (userId, avatar) => {
     await User.update({ avatar }, { where: { userId } });
   };
+
+  //명예의전당
+  // getRanks = async (selectedAnswer) => {
+  //   console.log(selectedAnswer)
+  //   return await User.find({
+  //     attributes:['selectedAnswer'],
+  //     where: {userId},
+  //     include: [model. User],
+  //     order,limit:5
+  //   })
+  // }
+
+  getAllUsers = async () => {
+    return await User.findAll({
+      limit: 5,
+      attributes: {
+        exclude: ['password'],
+      },
+      order: [['selectedAnswer', 'desc']],
+    });
+  };
 }
 
 module.exports = UserRepository;
