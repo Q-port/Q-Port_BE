@@ -20,6 +20,8 @@ router
   .post(auth, upload.upload.single('qnaImage'), questionsController.createQna)
   .get(questionsController.getQna);
 
+router.route('/search').get(questionsController.qnaSearch);
+
 /**
  * GET : 질문글 상세 조회
  * PUT : 질문글 제목, 내용 수정
