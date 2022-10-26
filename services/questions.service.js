@@ -150,19 +150,26 @@ class QuestionsService {
     const { questionId } = req.params;
 
     const getTime = Date.now();
+
+    // 중복된 아이피가 있는지 검증하기위해 repository 요청
     const existIp = await this.questionsRepository.qnaViewCheck({
       ip: ipAdress,
       questionId,
     });
 
+    // 중복된 아이피가 없으면 DB에 추가
     if (!existIp)
       return await this.questionsRepository.createView({
         questionId,
         ip: ipAdress,
         time: getTime,
       });
+
+      // 조회수를 무작정 올리는것을 방지하기 위한 5초 간격
     const intervalCount =
       getTime.toString().substring(7) - existIp.time.substring(7) > 5000;
+
+      // 조회수를 올린지 5초가 지났으면 조회수 요청 및 시간 업데이트 요청
     if (intervalCount)
       await this.questionsRepository.qnaViewCount({
         ip: ipAdress,
@@ -171,17 +178,22 @@ class QuestionsService {
       });
   };
 
+  // 내가 쓴 질문글 찾아오기
   myQuestions = async (req, res) => {
     const { userId } = req.params;
     return await this.questionsRepository.myQuestions(userId);
   };
 
+  // 질문글 제목으로 검색해오기
   qnaSearch = async (req, res) => {
     const { content } = req.query;
+
+    // 내용 미입력시
     if (!content) throw new Error('내용을 입력해주세요.');
 
     const qnas = await this.questionsRepository.getQna();
 
+    // 모든 글들을 불러와서 검색어가 제목에 포함되는 목록 리턴
     return qnas.filter((q) => q.title.includes(content));
   };
 }
