@@ -9,7 +9,7 @@ class AnswersController {
     try {
       await this.answersService.createAnswer(req, res);
 
-      res.status(200).send({ ok: true, message: '답변 작성 완료' });
+      res.status(201).send({ ok: true, message: '답변 작성 완료' });
     } catch (error) {
       next(error);
     }
@@ -30,7 +30,7 @@ class AnswersController {
     try {
       await this.answersService.updateAnswer(req, res);
 
-      res.status(200).send({ ok: true, message: '답변이 수정되었습니다.' });
+      res.status(201).send({ ok: true, message: '답변이 수정되었습니다.' });
     } catch (error) {
       next(error);
     }
@@ -42,17 +42,6 @@ class AnswersController {
       await this.answersService.deleteAnswer(req, res);
 
       res.status(200).send({ ok: true, message: '답변이 삭제되었습니다.' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  // 이미지 업데이트
-  updateImage = async (req, res, next) => {
-    try {
-      await this.answersService.updateImage(req, res);
-
-      res.status(200).send({ ok: true, message: '이미지가 등록되었습니다.' });
     } catch (error) {
       next(error);
     }

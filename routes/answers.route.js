@@ -16,14 +16,6 @@ router
   .post(Auth, upload.upload.single('answerImg'), answersController.createAnswer)
   .get(answersController.getAnswer);
 
-//  답변에 이미지 등록 /api/answers/:answerId/image
-router.put(
-  '/:answerId/image',
-  Auth,
-  upload.upload.single('answerImg'),
-  answersController.updateImage
-);
-
 // 답변글 수정 /api/answers/:answerId
 // 답변글 삭제 /api/answers/:answerId
 router
