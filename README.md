@@ -1,4 +1,4 @@
-![메인 소개 이미지](https://qportminiprojectmini.s3.ap-northeast-2.amazonaws.com/post/1666864302513.png)
+![메인 소개 이미지](https://qportminiprojectmini.s3.ap-northeast-2.amazonaws.com/post/1666864365169.jpeg)
 
 ---------------------------
 
