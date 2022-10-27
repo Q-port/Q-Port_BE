@@ -17,7 +17,7 @@
 | Back-end | 최원선 | https://github.com/wonsunny|
 | Back-end | 장용호 | https://github.com/JangKroed|
 | Front-end | 한세준 | https://github.com/hansejun|
-| Front-end | 이민 | https://github.com/Pasilda123|  
+| Front-end | 이민기 | https://github.com/Pasilda123|  
 
 
 # 👔 Project Architecture
